@@ -44,6 +44,10 @@ class LoginPage(BasePage):
     remember_me_checkbox_xpath_locator = '//input[@class="form-check"]'
     forgot_password_xpath_locator = '//div[@class="forget_password"]'
     forgot_password_title_xpath_locator = '//div[@class="forget_password_right_part_heading"]/h4'
+    profile_details_dropdown_icon_xpath_locator = '//i[@class="fa fa-caret-down"]'
+    dropdown_logout_button_xpath_locator = "//a[contains(text(),'Log Out')]"
+    dashboard_text_xpath_locator = "//h3[contains(text(),'Dashboard')]"
+    invalid_credentials_xpath_locator = "//h4[contains(text(),' Invalid Credentials! ')]"
 
     signup_page_main_text_xpath_locator = '//div[@class="heading_outer"]'
 
@@ -57,6 +61,11 @@ class LoginPage(BasePage):
     INVALID_FORMAT_USERNAME = 'demo@twikkie.'
     INVALID_USERNAME = 'demo@twikie.com'
     INVALID_PASSWORD = 'DEMO'
+    VALID_USERNAME1 = 'vardanyan.gago@gmail.com'
+    VALID_PASSWORD1 = 'User123456'
+    URL_ADMIN_SUBDIRECTORY = 'admin'
+    URL_COMPANY_SUBDIRECTORY = 'company'
+
 
     # Error messages
     WRONG_DOMAIN_NAME_ERROR_MESSAGE = 'This Domain Does Not Exist In Our System'
@@ -65,6 +74,7 @@ class LoginPage(BasePage):
     USERNAME_INVALID_FORMAT_ERROR_MESSAGE = 'Your email address must be valid.'
     INVALID_PASSWORD_ERROR_MESSAGE = 'Invalid Password '
     INVALID_EMAIL_ADDRESS_ERROR_MESSAGE = 'Invalid Email Address '
+    INVALID_CREDENTIALS = 'Invalid Credentials!'
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -170,6 +180,9 @@ class LoginPage(BasePage):
     def get_password_required_error_message(self):
         return self.get_text(self.password_required_error_message_xpath_locator)
 
+    def get_invalid_credentials_error_message(self):
+        return self.get_text(self.invalid_credentials_xpath_locator)
+
     def validate_invalid_password_error_message(self):
         return self.get_element(self.INVALID_PASSWORD_ERROR_MESSAGE).is_displayed()
 
@@ -181,3 +194,13 @@ class LoginPage(BasePage):
 
     def fill_login_email(self, password):
         return self.send_keys(password, self.username_field_xpath_locator, locator_type='xpath')
+
+    def click_on_logout_button(self):
+        self.element_click(self.profile_details_dropdown_icon_xpath_locator)
+        self.element_click(self.dropdown_logout_button_xpath_locator)
+
+    def validate_dashboard_text(self):
+        return self.is_element_present(self.dashboard_text_xpath_locator)
+
+
+

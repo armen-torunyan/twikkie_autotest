@@ -193,10 +193,10 @@ def test_login_with_invalid_email_and_valid_password_TC_20(driver):
     log.info(f"{test_login_with_invalid_email_and_valid_password_TC_20} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
-    user_login_page.user_login(user_login_page.INVALID_FORMAT_USERNAME, user_login_page.VALID_PASSWORD)
+    user_login_page.user_login(user_login_page.INVALID_USERNAME, user_login_page.VALID_PASSWORD)
     user_login_page.click_on_login_button()
-    assert (user_login_page.get_username_invalid_format_error_message() ==
-            user_login_page.USERNAME_INVALID_FORMAT_ERROR_MESSAGE)
+    assert (user_login_page.get_invalid_credentials_error_message() ==
+            user_login_page.INVALID_CREDENTIALS)
     log.info(f"{test_login_with_invalid_email_and_valid_password_TC_20} >>>>>>>>>>>>>>>>> finished")
 
 
@@ -210,7 +210,8 @@ def test_login_with_valid_email_and_invalid_password_TC_21(driver):
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.user_login(user_login_page.VALID_USERNAME, user_login_page.INVALID_PASSWORD)
     user_login_page.click_on_login_button()
-    assert user_login_page.validate_invalid_password_error_message
+    assert (user_login_page.get_invalid_credentials_error_message() ==
+            user_login_page.INVALID_CREDENTIALS)
     log.info(f"{test_login_with_valid_email_and_invalid_password_TC_21} >>>>>>>>>>>>>>>>> finished")
 
 
@@ -224,7 +225,8 @@ def test_login_with_invalid_email_and_invalid_password_TC_22(driver):
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.user_login(user_login_page.INVALID_USERNAME, user_login_page.INVALID_PASSWORD)
     user_login_page.click_on_login_button()
-    assert user_login_page.INVALID_EMAIL_ADDRESS_ERROR_MESSAGE
+    assert (user_login_page.get_invalid_credentials_error_message() ==
+            user_login_page.INVALID_CREDENTIALS)
     log.info(f"{test_login_with_invalid_email_and_invalid_password_TC_22} >>>>>>>>>>>>>>>>> finished")
 
 
@@ -239,3 +241,66 @@ def test_valid_login_TC_23(driver):
     user_login_page.user_login(user_login_page.VALID_USERNAME, user_login_page.VALID_PASSWORD)
     assert user_login_page.validate_welcome_message()
     log.info(f"{test_valid_login_TC_23} >>>>>>>>>>>>>>>>> finished")
+
+
+@mark.regression
+@mark.smoke
+def test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_24(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_login_page = LoginPage(driver)
+    log.info(f"{test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_24} >>>>>>>>>>>>>>>>> started")
+    user_login_page.navigate_to_domain_page()
+    user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
+    user_login_page.user_login(user_login_page.VALID_USERNAME, user_login_page.VALID_PASSWORD)
+    driver.back()
+    driver.forward()
+    assert user_login_page.URL_ADMIN_SUBDIRECTORY in driver.current_url
+    log.info(f"{test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_24} >>>>>>>>>>>>>>>>> finished")
+
+
+@mark.regression
+@mark.smoke
+def test_login_system_back_button_TC_25(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_login_page = LoginPage(driver)
+    log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> started")
+    user_login_page.navigate_to_domain_page()
+    user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
+    user_login_page.user_login(user_login_page.VALID_USERNAME, user_login_page.VALID_PASSWORD)
+    user_login_page.click_on_later_button()
+    user_login_page.click_on_logout_button()
+    driver.back()
+    assert user_login_page.URL_COMPANY_SUBDIRECTORY in driver.current_url
+    log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> finished")
+
+
+# @mark.regression
+# @mark.smoke
+# def test_login_system_back_button_TC_25(driver):
+#     log = cl.custom_logger(logging.DEBUG)
+#     user_login_page = LoginPage(driver)
+#     log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> started")
+#     user_login_page.navigate_to_domain_page()
+#     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
+#     user_login_page.user_login(user_login_page.VALID_USERNAME, user_login_page.VALID_PASSWORD)
+#     user_login_page.click_on_later_button()
+#     user_login_page.click_on_logout_button()
+#     driver.back()
+#     assert "company" in driver.current_url
+#     log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> finished")
+
+
+# @mark.regression
+# @mark.smoke
+# def test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27(driver):
+#     log = cl.custom_logger(logging.DEBUG)
+#     user_login_page = LoginPage(driver)
+#     log.info(f"{test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27} >>>>>>>>>>>>>>>>> started")
+#     user_login_page.navigate_to_domain_page()
+#     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
+#     user_login_page.user_login(user_login_page.VALID_USERNAME1, user_login_page.VALID_PASSWORD1)
+#     user_login_page.click_on_later_button()
+#     user_login_page.click_on_logout_button()
+#     driver.back()
+#     assert "company" in driver.current_url
+#     log.info(f"{test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27} >>>>>>>>>>>>>>>>> finished")

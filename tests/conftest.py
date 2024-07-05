@@ -79,8 +79,6 @@ def driver(config_wait_time, app_config):
         options = webdriver.ChromeOptions()
         options.add_argument('--ignore-certificate-errors')
         options = webdriver.ChromeOptions()
-        # path = os.path.abspath(
-        #     os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)) + '\\drivers\\chromedriver.exe'
         options.add_argument('--ignore-certificate-errors')
         caps = DesiredCapabilities.CHROME
         caps['goog:loggingPrefs'] = {'browser': 'ALL'}

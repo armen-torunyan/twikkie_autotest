@@ -1,4 +1,5 @@
 import json
+import time
 import xml.etree.ElementTree as ET
 from traceback import print_stack
 
@@ -105,6 +106,7 @@ class BasePage(SeleniumDriver):
         try:
             el = self.get_element(list_selector)
             el.click()
+            time.sleep(3)
             items = self.get_element_list(list_item_selector)
             for item in items:
                 if item.text == value:
