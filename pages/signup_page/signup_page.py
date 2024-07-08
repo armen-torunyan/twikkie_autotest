@@ -13,8 +13,6 @@ from selenium import webdriver
 import random
 import string
 
-driver = webdriver.Chrome()
-base = BasePage(driver)
 
 
 class SignupPage(BasePage):
