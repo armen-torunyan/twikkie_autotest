@@ -74,7 +74,7 @@ root
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/yourusername/twikkie_autotest.git
+  https://github.com/vardanyangag/twikkie_autotest
 2. Navigate to the project directory:
    ```sh
    cd twikkie_autotest
