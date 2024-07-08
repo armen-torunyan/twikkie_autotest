@@ -79,9 +79,7 @@ root
 2. Navigate to the project directory:
    ```sh
    cd twikkie_autotest
-3. Install the required Python packages:
-    ```sh
-   pip install -r requirements.txt
+
 
 ### Running Tests
 
