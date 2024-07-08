@@ -75,6 +75,7 @@ root
 1. Clone the repository:
    ```sh
   https://github.com/vardanyangag/twikkie_autotest
+  
 2. Navigate to the project directory:
    ```sh
    cd twikkie_autotest
