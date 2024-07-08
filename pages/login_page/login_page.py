@@ -1,3 +1,4 @@
+import time
 from traceback import print_stack
 
 from selenium.webdriver.common.by import By
@@ -65,7 +66,6 @@ class LoginPage(BasePage):
     VALID_PASSWORD1 = 'User123456'
     URL_ADMIN_SUBDIRECTORY = 'admin'
     URL_COMPANY_SUBDIRECTORY = 'company'
-
 
     # Error messages
     WRONG_DOMAIN_NAME_ERROR_MESSAGE = 'This Domain Does Not Exist In Our System'
@@ -202,5 +202,13 @@ class LoginPage(BasePage):
     def validate_dashboard_text(self):
         return self.is_element_present(self.dashboard_text_xpath_locator)
 
+    def navigate_back_and_forward(self):
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH,
+                                                                         self.dashboard_text_xpath_locator)))
+        self.driver.back()
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH,
+                                                                         self.forgot_password_xpath_locator)))
 
-
+        self.driver.forward()
+        WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.XPATH,
+                                                                        self.dashboard_text_xpath_locator)))

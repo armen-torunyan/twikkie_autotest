@@ -252,8 +252,7 @@ def test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_24(drive
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.user_login(user_login_page.VALID_USERNAME, user_login_page.VALID_PASSWORD)
-    driver.back()
-    driver.forward()
+    user_login_page.navigate_back_and_forward()
     assert user_login_page.URL_ADMIN_SUBDIRECTORY in driver.current_url
     log.info(f"{test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_24} >>>>>>>>>>>>>>>>> finished")
 

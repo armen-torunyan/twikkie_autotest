@@ -10,6 +10,8 @@ from base.base_page import BasePage
 import utilities.custom_logger as cl
 import logging
 from selenium import webdriver
+import random
+import string
 
 driver = webdriver.Chrome()
 base = BasePage(driver)
@@ -45,7 +47,7 @@ class SignupPage(BasePage):
     company_phone_field_xpath_locator = '//input[@placeholder="Enter your Phone no."]'
     submit_button_xpath_locator = '//button[@class="btn btn-submit btn-login"]'
     terms_and_conditions_checkbox_xpath_locator = '//div//input[@id="flexCheckDefault"]'
-    dropdown_xpath_locator = '//select[@class="form-control"]'
+    dropdown_xpath_locator = '//div//select[@class="form-control"]'
     country_dropdown_list_xpath_locator = '//select[@class="form-control"]/option'
     first_name_validation_message_xpath_locator = "//div[contains(text(),'The first name is required!')]"
     last_name_validation_message_xpath_locator = "//div[contains(text(),'The last name is required!')]"
@@ -53,7 +55,7 @@ class SignupPage(BasePage):
     domain_name_validation_message_xpath_locator = "//div[contains(text(),'Domain name is required!')]"
     company_email_validation_message_xpath_locator = "//div[contains(text(),' Company email address is required,')]"
     company_phone_validation_message_xpath_locator = "//div[contains(text(),'A company phone number is required.')]"
-    invalid_phone_format_validation_message_xpath_locator = "//div[contains(text(),'A company phone number is required.')]"
+    invalid_phone_format_validation_message_xpath_locator = "//div[contains(text(),'Invalid phone number!')]"
     company_country_validation_message_xpath_locator = "//div[contains(text(),'Country is required!')]"
     signup_submit_form_error_message_xpath_locator = "//h4[contains(text(),'  Please read and accept the Terms & Conditions. ')]"
     # registered_email_id_error_message_xpath_locator = "//h4[contains(text(),'  Please read and accept the Terms & Conditions. ')]"
@@ -61,12 +63,13 @@ class SignupPage(BasePage):
     registered_email_id_error_message_xpath_locator = "//h4[contains(text(),'We are sorry, but the email ID you provided seems to already exist in our system. Try logging in or using a different email ID.')]"
     already_taken_company_name_error_message_xpath_locator = "//h4[contains(text(),'Our system shows that a company with the same name already exists.')]"
     terms_accept_checkbox_xpath_locator = '//input[@style="outline: red solid 1px;"]'
+    operation_successful_xpath_locator = "//h4[contains(text(),'Operation Successful. ')]"
 
     # Test data
     TWIKKIE_URL = 'http://172.105.53.207/'
     FIRST_NAME = 'Jane'
     LAST_NAME = 'James'
-    COMPANY_NAME = 'demo'
+    COMPANY_NAME = 'demo1'
     ALREADY_TAKEN_COMPANY_NAME = 'Demo ltd'
     PHONE = '00000000000'
     INVALID_PHONE_NUMBER = '00'
@@ -86,6 +89,7 @@ class SignupPage(BasePage):
     URL_ADMIN_SUBDIRECTORY = '/admin'
     URL_COMPANY_SUBDIRECTORY = '/company'
     URL_SIGNUP_SUBDIRECTORY = 'signup'
+    COUNTRY_NAME = 'Armenia'
 
     # Validation and error messages
     FIRST_NAME_FIELD_VALIDATION_MESSAGE = 'The first name is required!'
@@ -100,6 +104,7 @@ class SignupPage(BasePage):
     PHONE_INVALID_FORMAT_VALIDATION_MESSAGE = 'Invalid phone number!'
     INVALID_EMAIL_FORMAT_VALIDATION_MESSAGE = 'Your email address must be valid.'
     ALREADY_TAKEN_COMPANY_NAME_ERROR_MESSAGE = 'Our system shows that a company with the same name already exists.'
+    OPERATION_SUCCESSFUL_VALIDATION_MESSAGE = 'Operation Successful.'
 
     def verify_homepage_text(self):
         return self.element_presence_check(self.twikkie_homepage_text_xpath_locator)
@@ -168,10 +173,16 @@ class SignupPage(BasePage):
         return self.get_text(self.already_taken_company_name_error_message_xpath_locator)
 
     def get_company_phone_field_validation_message(self):
+        return self.get_text(self.company_phone_validation_message_xpath_locator)
+
+    def get_company_phone_field_validation_message_with_invalid_format(self):
         return self.get_text(self.invalid_phone_format_validation_message_xpath_locator)
 
     def get_company_country_dropdown_validation_message(self):
         return self.get_text(self.company_country_validation_message_xpath_locator)
+
+    def get_operation_successful_validation_message(self):
+        return self.get_text(self.operation_successful_xpath_locator)
 
     def get_signup_form_error_message(self):
         return self.get_text(self.signup_submit_form_error_message_xpath_locator)
@@ -212,6 +223,9 @@ class SignupPage(BasePage):
     def choose_country_from_dropdown(self, country):
         self.select_item_from_drop_down_list(self.get_element(self.dropdown_xpath_locator), 'text', country)
 
+     # def select_country_from_dropdown(self, country):
+     #     self.COUNTRY_NAME.select_by_visible_text(country)
+
     def user_signup(self, firstname, lastname, company, domain, email, phone):
         try:
             self.send_keys(firstname, self.first_name_field_xpath_locator)
@@ -233,5 +247,19 @@ class SignupPage(BasePage):
     def check_checkbox_selected(self):
         return self.get_element(self.terms_and_conditions_checkbox_xpath_locator).is_selected()
 
-    # def select_from_dropdown(self):
-    #     return self.select_item_from_drop_down_list(self.country_dropdown_list_xpath_locator, 'text', "Armenia")
+    def get_selected_country(self):
+        return self.get_text(self.dropdown_xpath_locator)
+
+
+    def random_email(self) -> str:
+        local_part_length = 10
+        allowed_characters = string.ascii_lowercase + string.digits
+        local_part = ''.join(random.choice(allowed_characters) for _ in range(local_part_length))
+        email_address = f"{local_part}@gmail.com"
+        return email_address
+
+    @staticmethod
+    def rand_str(length=6) -> str:
+
+        allowed_characters = string.ascii_lowercase + string.digits
+        return ''.join(random.choices(allowed_characters, k=length))

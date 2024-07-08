@@ -147,11 +147,16 @@ def test_signup_with_partially_blank_fields_TC_8(driver):
 def test_signup_with_already_registered_email_TC_9(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_signup_page = SignupPage(driver)
+    random_domain_name = user_signup_page.rand_str()
+    random_company_name = user_signup_page.rand_str()
     log.info(f"{test_signup_with_already_registered_email_TC_9} >>>>>>>>>>>>>>>>> started")
     user_signup_page.click_on_signup_tab()
     user_signup_page.accept_cookies()
-    user_signup_page.user_signup(user_signup_page.FIRST_NAME, user_signup_page.LAST_NAME, user_signup_page.COMPANY_NAME,
-                                 user_signup_page.NEW_DOMAIN_NAME, user_signup_page.REGISTERED_EMAIL,
+    user_signup_page.user_signup(user_signup_page.FIRST_NAME,
+                                 user_signup_page.LAST_NAME,
+                                 random_company_name,
+                                 random_domain_name,
+                                 user_signup_page.REGISTERED_EMAIL,
                                  user_signup_page.PHONE)
     assert (user_signup_page.get_signup_registered_email_error_message() ==
             user_signup_page.REGISTERED_EMAIL_ERROR_MESSAGE)
@@ -160,14 +165,41 @@ def test_signup_with_already_registered_email_TC_9(driver):
 
 @mark.regression
 @mark.smoke
+def test_signup_with_same_phone_number_TC_10(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_signup_page = SignupPage(driver)
+    random_email = user_signup_page.random_email()
+    random_company_name = user_signup_page.rand_str()
+    random_domain_name = user_signup_page.rand_str()
+    log.info(f"{test_signup_with_same_phone_number_TC_10} >>>>>>>>>>>>>>>>> started")
+    user_signup_page.click_on_signup_tab()
+    user_signup_page.accept_cookies()
+    user_signup_page.user_signup(user_signup_page.FIRST_NAME,
+                                 user_signup_page.LAST_NAME,
+                                 random_company_name,
+                                 random_domain_name,
+                                 random_email,
+                                 user_signup_page.PHONE)
+    assert (user_signup_page.get_operation_successful_validation_message() ==
+            user_signup_page.OPERATION_SUCCESSFUL_VALIDATION_MESSAGE)
+    log.info(f"{test_signup_with_same_phone_number_TC_10} >>>>>>>>>>>>>>>>> finished")
+
+
+
+@mark.regression
+@mark.smoke
 def test_signup_with_already_taken_company_name_TC_11(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_signup_page = SignupPage(driver)
+    random_domain_name = user_signup_page.rand_str()
     log.info(f"{test_signup_with_already_taken_company_name_TC_11} >>>>>>>>>>>>>>>>> started")
     user_signup_page.click_on_signup_tab()
     user_signup_page.accept_cookies()
-    user_signup_page.user_signup(user_signup_page.FIRST_NAME, user_signup_page.LAST_NAME, user_signup_page.ALREADY_TAKEN_COMPANY_NAME,
-                                 user_signup_page.NEW_DOMAIN_NAME, user_signup_page.UNREGISTERED_EMAIL,
+    user_signup_page.user_signup(user_signup_page.FIRST_NAME,
+                                 user_signup_page.LAST_NAME,
+                                 user_signup_page.ALREADY_TAKEN_COMPANY_NAME,
+                                 random_domain_name,
+                                 user_signup_page.UNREGISTERED_EMAIL,
                                  user_signup_page.PHONE)
     assert (user_signup_page.get_company_name_field_error_message() ==
             user_signup_page.ALREADY_TAKEN_COMPANY_NAME_ERROR_MESSAGE)
@@ -181,9 +213,10 @@ def test_signup_phone_field_with_invalid_format_TC_12(driver):
     user_signup_page = SignupPage(driver)
     log.info(f"{test_signup_phone_field_with_invalid_format_TC_12} >>>>>>>>>>>>>>>>> started")
     user_signup_page.click_on_signup_tab()
+    user_signup_page.accept_cookies()
     user_signup_page.fill_company_phone(user_signup_page.INVALID_PHONE_NUMBER)
     user_signup_page.click_on_submit_button()
-    assert (user_signup_page.get_company_phone_field_validation_message() ==
+    assert (user_signup_page.get_company_phone_field_validation_message_with_invalid_format() ==
             user_signup_page.PHONE_INVALID_FORMAT_VALIDATION_MESSAGE)
     log.info(f"{test_signup_phone_field_with_invalid_format_TC_12} >>>>>>>>>>>>>>>>> finished")
 
@@ -195,19 +228,28 @@ def test_signup_with_invalid_email_format_TC_14(driver):
     user_signup_page = SignupPage(driver)
     log.info(f"{test_signup_with_invalid_email_format_TC_14} >>>>>>>>>>>>>>>>> started")
     user_signup_page.click_on_signup_tab()
-    # user_signup_page.fill_signup_first_name(user_signup_page.FIRST_NAME)
-    # user_signup_page.fill_signup_last_name(user_signup_page.LAST_NAME)
-    # user_signup_page.fill_company_name(user_signup_page.COMPANY_NAME)
-    # user_signup_page.fill_domain_name(user_signup_page.DOMAIN_NAME)
-    # user_signup_page.fill_company_phone(user_signup_page.PHONE)
-    # user_signup_page.fill_company_email(user_signup_page.INVALID_FORMAT_USERNAME)
-    # user_signup_page.click_on_submit_button()
-    user_signup_page.user_signup(user_signup_page.FIRST_NAME, user_signup_page.LAST_NAME, user_signup_page.COMPANY_NAME,
-                                 user_signup_page.DOMAIN_NAME, user_signup_page.INVALID_FORMAT_USERNAME,
+    user_signup_page.accept_cookies()
+    user_signup_page.user_signup(user_signup_page.FIRST_NAME,
+                                 user_signup_page.LAST_NAME,
+                                 user_signup_page.COMPANY_NAME,
+                                 user_signup_page.DOMAIN_NAME,
+                                 user_signup_page.INVALID_FORMAT_USERNAME,
                                  user_signup_page.PHONE)
     assert (user_signup_page.get_email_invalid_format_validation_message() ==
             user_signup_page.INVALID_EMAIL_FORMAT_VALIDATION_MESSAGE)
     log.info(f"{test_signup_with_invalid_email_format_TC_14} >>>>>>>>>>>>>>>>> finished")
+
+@mark.regression
+@mark.smoke
+def test_signup_country_selection_from_dropdown_TC_16(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_signup_page = SignupPage(driver)
+    log.info(f"{test_signup_country_selection_from_dropdown_TC_16} >>>>>>>>>>>>>>>>> started")
+    user_signup_page.click_on_signup_tab()
+    user_signup_page.accept_cookies()
+    user_signup_page.choose_country_from_dropdown(user_signup_page.COUNTRY_NAME)
+    assert user_signup_page.COUNTRY_NAME in user_signup_page.get_selected_country()
+    log.info(f"{test_signup_country_selection_from_dropdown_TC_16} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
