@@ -118,3 +118,17 @@ class Util(object):
                 return False
         else:
             return True
+
+    @staticmethod
+    def random_email() -> str:
+        local_part_length = 10
+        allowed_characters = string.ascii_lowercase + string.digits
+        local_part = ''.join(random.choice(allowed_characters) for _ in range(local_part_length))
+        email_address = f"{local_part}@gmail.com"
+        return email_address
+
+    @staticmethod
+    def rand_str(length=6) -> str:
+
+        allowed_characters = string.ascii_lowercase + string.digits
+        return ''.join(random.choices(allowed_characters, k=length))

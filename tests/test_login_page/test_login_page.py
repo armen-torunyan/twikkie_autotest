@@ -9,123 +9,147 @@ from pages.login_page.login_page import LoginPage
 
 @mark.regression
 @mark.smoke
-def test_login_button(driver):
+def test_login_button_TC_1(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_button} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_button_TC_1} >>>>>>>>>>>>>>>>> started")
     assert user_login_page.verify_login_button()
-    log.info(f"{test_login_button} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_button_TC_1} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_navigation_to_domain_page(driver):
+def test_navigation_to_domain_page_TC_2(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_navigation_to_domain_page} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_navigation_to_domain_page_TC_2} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     assert user_login_page.verify_domain_page() == user_login_page.LOGIN_PAGE_TEXT
-    log.info(f"{test_navigation_to_domain_page} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_navigation_to_domain_page_TC_2} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_page_items(driver):
+def test_login_page_items_TC_3(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_page_items} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_page_items_TC_3} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     assert user_login_page.check_domain_name_field_presence()
     assert user_login_page.check_submit_button_presence()
     assert user_login_page.check_signup_link_text_button_presence()
-    log.info(f"{test_login_page_items} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_page_items_TC_3} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_navigation_to_signup_page(driver):
+def test_navigation_to_signup_page_TC_4(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_navigation_to_signup_page} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_navigation_to_signup_page_TC_4} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     assert user_login_page.verify_navigation_to_signup_page()
-    log.info(f"{test_navigation_to_signup_page} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_navigation_to_signup_page_TC_4} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_domain_name_input(driver):
+def test_login_without_inputting_domain_TC_5(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_navigation_to_signup_page} >>>>>>>>>>>>>>>>> started")
-    user_login_page.navigate_to_domain_page()
-    user_login_page.enter_domain_name(user_login_page.DOMAIN_NAME)
-    assert user_login_page.get_domain_name() == user_login_page.DOMAIN_NAME
-    log.info(f"{test_navigation_to_signup_page} >>>>>>>>>>>>>>>>> finished")
-
-
-@mark.regression
-@mark.smoke
-def test_login_without_inputting_domain(driver):
-    log = cl.custom_logger(logging.DEBUG)
-    user_login_page = LoginPage(driver)
-    log.info(f"{test_login_without_inputting_domain} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_without_inputting_domain_TC_5} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.click_on_submit_button()
     assert user_login_page.validate_domain_field_validation_message()
-    log.info(f"{test_login_without_inputting_domain} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_without_inputting_domain_TC_5} >>>>>>>>>>>>>>>>> finished")
+
+@mark.regression
+@mark.smoke
+def test_domain_name_input_TC_6(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_login_page = LoginPage(driver)
+    log.info(f"{test_domain_name_input_TC_6} >>>>>>>>>>>>>>>>> started")
+    user_login_page.navigate_to_domain_page()
+    user_login_page.enter_domain_name(user_login_page.DOMAIN_NAME)
+    assert user_login_page.get_domain_name() == user_login_page.DOMAIN_NAME
+    log.info(f"{test_domain_name_input_TC_6} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_via_wrong_domain(driver):
+def test_login_domain_name_is_not_exist_TC_7(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_via_wrong_domain} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_domain_name_is_not_exist_TC_7} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.WRONG_DOMAIN_NAME)
-    assert user_login_page.get_wrong_domain_error_message() == user_login_page.WRONG_DOMAIN_NAME_ERROR_MESSAGE
-    log.info(f"{test_login_via_wrong_domain} >>>>>>>>>>>>>>>>> finished")
+    assert user_login_page.get_domain_name_error_message() == user_login_page.DOMAIN_NAME_ERROR_MESSAGE
+    log.info(f"{test_login_domain_name_is_not_exist_TC_7} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_navigation_to_login_page(driver):
+def test_login_via_invalid_domain_name_TC_8(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_navigation_to_login_page} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_via_invalid_domain_name_TC_8} >>>>>>>>>>>>>>>>> started")
+    user_login_page.navigate_to_domain_page()
+    user_login_page.submit_domain_name(user_login_page.INVALID_DOMAIN_NAME)
+    assert user_login_page.verify_domain_page() == user_login_page.LOGIN_PAGE_TEXT
+    assert user_login_page.get_domain_name_error_message() == user_login_page.DOMAIN_NAME_ERROR_MESSAGE
+    log.info(f"{test_login_via_invalid_domain_name_TC_8} >>>>>>>>>>>>>>>>> finished")
+
+
+@mark.regression
+@mark.smoke
+def test_login_domain_name_error_message_TC_9(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_login_page = LoginPage(driver)
+    log.info(f"{test_login_domain_name_error_message_TC_9} >>>>>>>>>>>>>>>>> started")
+    user_login_page.navigate_to_domain_page()
+    user_login_page.submit_domain_name(user_login_page.WRONG_DOMAIN_NAME)
+    assert user_login_page.get_domain_name_error_message() == user_login_page.DOMAIN_NAME_ERROR_MESSAGE
+    log.info(f"{test_login_domain_name_error_message_TC_9} >>>>>>>>>>>>>>>>> finished")
+
+
+@mark.regression
+@mark.smoke
+def test_navigation_to_login_page_TC_10(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_login_page = LoginPage(driver)
+    log.info(f"{test_navigation_to_login_page_TC_10} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     assert user_login_page.verify_email_address_field()
-    log.info(f"{test_navigation_to_login_page} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_navigation_to_login_page_TC_10} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_page_items(driver):
+def test_login_page_items_TC_11(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_page_items} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_page_items_TC_11} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     assert user_login_page.verify_email_address_field()
     assert user_login_page.verify_password_field()
     assert user_login_page.validate_remember_me_checkbox_displays()
     assert user_login_page.validate_forget_password_button()
-    log.info(f"{test_login_page_items} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_page_items_TC_11} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_navigate_to_forgot_password_page(driver):
+def test_navigate_to_forgot_password_page_TC_12(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_navigate_to_forgot_password_page} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_navigate_to_forgot_password_page_TC_12} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.navigate_to_forget_password_page()
     assert user_login_page.validate_forgot_password_page()
-    log.info(f"{test_navigate_to_forgot_password_page} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_navigate_to_forgot_password_page_TC_12} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
@@ -271,22 +295,6 @@ def test_login_system_back_button_TC_25(driver):
     driver.back()
     assert user_login_page.URL_COMPANY_SUBDIRECTORY in driver.current_url
     log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> finished")
-
-
-# @mark.regression
-# @mark.smoke
-# def test_login_system_back_button_TC_25(driver):
-#     log = cl.custom_logger(logging.DEBUG)
-#     user_login_page = LoginPage(driver)
-#     log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> started")
-#     user_login_page.navigate_to_domain_page()
-#     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
-#     user_login_page.user_login(user_login_page.VALID_USERNAME, user_login_page.VALID_PASSWORD)
-#     user_login_page.click_on_later_button()
-#     user_login_page.click_on_logout_button()
-#     driver.back()
-#     assert "company" in driver.current_url
-#     log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> finished")
 
 
 # @mark.regression

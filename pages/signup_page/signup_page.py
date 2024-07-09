@@ -1,7 +1,9 @@
+# import email
 import time
 from traceback import print_stack
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -10,8 +12,6 @@ from base.base_page import BasePage
 import utilities.custom_logger as cl
 import logging
 from selenium import webdriver
-import random
-import string
 
 
 
@@ -51,7 +51,7 @@ class SignupPage(BasePage):
     last_name_validation_message_xpath_locator = "//div[contains(text(),'The last name is required!')]"
     company_name_validation_message_xpath_locator = "//div[contains(text(),'The company name is required!')]"
     domain_name_validation_message_xpath_locator = "//div[contains(text(),'Domain name is required!')]"
-    company_email_validation_message_xpath_locator = "//div[contains(text(),' Company email address is required,')]"
+    company_email_validation_message_xpath_locator = "//div[contains(text(),' Company email address is required.')]"
     company_phone_validation_message_xpath_locator = "//div[contains(text(),'A company phone number is required.')]"
     invalid_phone_format_validation_message_xpath_locator = "//div[contains(text(),'Invalid phone number!')]"
     company_country_validation_message_xpath_locator = "//div[contains(text(),'Country is required!')]"
@@ -62,6 +62,10 @@ class SignupPage(BasePage):
     already_taken_company_name_error_message_xpath_locator = "//h4[contains(text(),'Our system shows that a company with the same name already exists.')]"
     terms_accept_checkbox_xpath_locator = '//input[@style="outline: red solid 1px;"]'
     operation_successful_xpath_locator = "//h4[contains(text(),'Operation Successful. ')]"
+    setup_twikkie_company_account_message_xpath_locator = "//h4[contains(text(),'Please hold tight as we set up your Twikkie Company Account')]"
+    signup_confirmation_message_xpath_locator = '//div[@class="welcome_twikkie_right_part_heading"]/h4[contains(text(),"Check your email!")]'
+    # successfully_registered_email_xpath_locator = f'//div[@class="welcome_twikkie_right_part_heading"]/p/a[contains(text(),"{email}")]'
+
 
     # Test data
     TWIKKIE_URL = 'http://172.105.53.207/'
@@ -94,7 +98,7 @@ class SignupPage(BasePage):
     LAST_NAME_FIELD_VALIDATION_MESSAGE = 'The last name is required!'
     COMPANY_NAME_FIELD_VALIDATION_MESSAGE = 'The company name is required!'
     DOMAIN_NAME_FIELD_VALIDATION_MESSAGE = 'Domain name is required!'
-    COMPANY_EMAIL_FIELD_VALIDATION_MESSAGE = 'Company email address is required,'
+    COMPANY_EMAIL_FIELD_VALIDATION_MESSAGE = 'Company email address is required.'
     COMPANY_PHONE_FIELD_VALIDATION_MESSAGE = 'A company phone number is required.'
     COMPANY_COUNTRY_DROPDOWN_VALIDATION_MESSAGE = 'Country is required!'
     SIGNUP_SUBMIT_FORM_ERROR_MESSAGE = 'Please read and accept the Terms & Conditions.'
@@ -103,6 +107,8 @@ class SignupPage(BasePage):
     INVALID_EMAIL_FORMAT_VALIDATION_MESSAGE = 'Your email address must be valid.'
     ALREADY_TAKEN_COMPANY_NAME_ERROR_MESSAGE = 'Our system shows that a company with the same name already exists.'
     OPERATION_SUCCESSFUL_VALIDATION_MESSAGE = 'Operation Successful.'
+    SETUP_TWIKKIE_COMPANY_ACCOUNT_MESSAGE = 'Please hold tight as we set up your Twikkie Company Account'
+    SIGNUP_CONFIRMATION_MESSAGE = 'Check your email!'
 
     def verify_homepage_text(self):
         return self.element_presence_check(self.twikkie_homepage_text_xpath_locator)
@@ -146,6 +152,12 @@ class SignupPage(BasePage):
     def validate_company_phone_field_displayed(self):
         return self.get_element(self.company_phone_field_xpath_locator).is_displayed()
 
+    # def get_registered_user_email_locator(self, email):
+    #     return self.get_element(f'//div[@class="welcome_twikkie_right_part_heading"]/p/a[contains(text(),"{email}")]')
+    #
+    # def get_registered_email(self, email):
+    #     return self.get_text(self.get_registered_user_email_locator(email))
+
     def accept_cookies(self):
         self.element_click('//div[@class="Cookie_btn"]//button[1]')
 
@@ -154,6 +166,13 @@ class SignupPage(BasePage):
 
     def get_first_name_field_validation_message(self):
         return self.get_text(self.first_name_validation_message_xpath_locator)
+
+
+    def get_signup_confirmation_message(self):
+        return self.get_text(self.signup_confirmation_message_xpath_locator)
+
+    # def get_check_your_email_text(self):
+    #     return self.get_text(self.check_your_email_text_xpath_locator)
 
     def get_last_name_field_validation_message(self):
         return self.get_text(self.last_name_validation_message_xpath_locator)
@@ -242,22 +261,16 @@ class SignupPage(BasePage):
     def click_on_dropdown(self):
         return self.element_click(self.dropdown_xpath_locator)
 
+
+    def dropdown_list_options(self):
+        return self.get_element(self.country_dropdown_list_xpath_locator)
+
+    def get_dropdown_element_text(self):
+        return self.get_text(self.dropdown_list_options)
+
     def check_checkbox_selected(self):
         return self.get_element(self.terms_and_conditions_checkbox_xpath_locator).is_selected()
 
     def get_selected_country(self):
         return self.get_text(self.dropdown_xpath_locator)
 
-
-    def random_email(self) -> str:
-        local_part_length = 10
-        allowed_characters = string.ascii_lowercase + string.digits
-        local_part = ''.join(random.choice(allowed_characters) for _ in range(local_part_length))
-        email_address = f"{local_part}@gmail.com"
-        return email_address
-
-    @staticmethod
-    def rand_str(length=6) -> str:
-
-        allowed_characters = string.ascii_lowercase + string.digits
-        return ''.join(random.choices(allowed_characters, k=length))

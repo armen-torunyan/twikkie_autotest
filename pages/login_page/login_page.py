@@ -57,6 +57,7 @@ class LoginPage(BasePage):
     VALID_PASSWORD = "Demo123#"
     DOMAIN_NAME = "Demo"
     WRONG_DOMAIN_NAME = "Wrong"
+    INVALID_DOMAIN_NAME = "de"
     LOGIN_PAGE_TEXT = 'Company Login'
     VALID_DOMAIN = 'Twikkie_Demo'
     INVALID_FORMAT_USERNAME = 'demo@twikkie.'
@@ -68,7 +69,7 @@ class LoginPage(BasePage):
     URL_COMPANY_SUBDIRECTORY = 'company'
 
     # Error messages
-    WRONG_DOMAIN_NAME_ERROR_MESSAGE = 'This Domain Does Not Exist In Our System'
+    DOMAIN_NAME_ERROR_MESSAGE = 'This Domain Does Not Exist In Our System'
     USERNAME_REQUIRED_ERROR_MESSAGE = 'A username or email address is required.'
     PASSWORD_REQUIRED_ERROR_MESSAGE = "The password entered doesn't match"
     USERNAME_INVALID_FORMAT_ERROR_MESSAGE = 'Your email address must be valid.'
@@ -168,7 +169,7 @@ class LoginPage(BasePage):
     def validate_forgot_password_page(self):
         return self.is_element_present(self.forgot_password_title_xpath_locator)
 
-    def get_wrong_domain_error_message(self):
+    def get_domain_name_error_message(self):
         return self.get_text(self.domain_name_error_message_xpath_locator)
 
     def get_username_required_error_message(self):
