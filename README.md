@@ -89,3 +89,7 @@ root
 2. Execute tests using pytest:
    ```sh
    runPytest.bat
+
+### Run the specific test case:
+ ```sh
+pytest -k 'test case name'
