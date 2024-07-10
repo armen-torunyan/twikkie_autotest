@@ -5,6 +5,8 @@ import pytest
 from pytest import mark
 import utilities.custom_logger as cl
 from pages.login_page.login_page import LoginPage
+from utilities.util import Util
+
 
 
 @mark.regression
@@ -297,17 +299,51 @@ def test_login_system_back_button_TC_25(driver):
     log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> finished")
 
 
-# @mark.regression
-# @mark.smoke
-# def test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27(driver):
-#     log = cl.custom_logger(logging.DEBUG)
-#     user_login_page = LoginPage(driver)
-#     log.info(f"{test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27} >>>>>>>>>>>>>>>>> started")
-#     user_login_page.navigate_to_domain_page()
-#     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
-#     user_login_page.user_login(user_login_page.VALID_USERNAME1, user_login_page.VALID_PASSWORD1)
-#     user_login_page.click_on_later_button()
-#     user_login_page.click_on_logout_button()
-#     driver.back()
-#     assert "company" in driver.current_url
-#     log.info(f"{test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27} >>>>>>>>>>>>>>>>> finished")
+@mark.regression
+@mark.smoke
+def test_login_otp_is_enable_TC_26(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_login_page = LoginPage(driver)
+    log.info(f"{test_login_otp_is_enable_TC_26} >>>>>>>>>>>>>>>>> started")
+    user_login_page.navigate_to_domain_page()
+    user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
+    user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
+    time.sleep(3)
+    assert user_login_page.URL_VERIFY_OTP_SUBDIRECTORY in driver.current_url
+    assert user_login_page.validate_verify_otp_text()
+    log.info(f"{test_login_otp_is_enable_TC_26} >>>>>>>>>>>>>>>>> finished")
+
+
+@mark.regression
+@mark.smoke
+def test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_login_page = LoginPage(driver)
+    log.info(f"{test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27} >>>>>>>>>>>>>>>>> started")
+    user_login_page.navigate_to_domain_page()
+    user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
+    user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
+    time.sleep(3)
+    user_login_page.click_on_verify_button()
+    assert (user_login_page.get_otp_required_validation_message() ==
+            user_login_page.OTP_REQUIRED_VALIDATION_MESSAGE)
+    log.info(f"{test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27} >>>>>>>>>>>>>>>>> finished")
+
+
+@mark.regression
+@mark.smoke
+def test_that_user_cannot_proceed_with_invalid_OTP_code_TC_28(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_login_page = LoginPage(driver)
+    log.info(f"{test_that_user_cannot_proceed_with_invalid_OTP_code_TC_28} >>>>>>>>>>>>>>>>> started")
+    user_login_page.navigate_to_domain_page()
+    user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
+    user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
+    time.sleep(3)
+    user_login_page.fill_otp_field(user_login_page.INVALID_OTP)
+    user_login_page.click_on_verify_button()
+    assert (user_login_page.get_invalid_otp_error_message() ==
+            user_login_page.INVALID_OTP_ERROR_MESSAGE)
+    log.info(f"{test_that_user_cannot_proceed_with_invalid_OTP_code_TC_28} >>>>>>>>>>>>>>>>> finished")
+
+

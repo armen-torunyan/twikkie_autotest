@@ -274,3 +274,20 @@ class SignupPage(BasePage):
     def get_selected_country(self):
         return self.get_text(self.dropdown_xpath_locator)
 
+    @staticmethod
+    def get_options(driver):
+        select_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//select[@class="form-control"]'))
+        )
+        time.sleep(5)
+        options = select_element.find_elements(By.XPATH, './/option')
+        options_list = [option.text for option in options]
+        print(options_list)
+        return options_list
+
+    @staticmethod
+    def compare_options(options_list_1, options_list_2):
+        missing_in_site = [opt for opt in options_list_1 if opt not in options_list_2]
+        extra_in_site = [opt for opt in options_list_2 if opt not in options_list_1]
+        return missing_in_site, extra_in_site
+

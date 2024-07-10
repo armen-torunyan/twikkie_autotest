@@ -251,16 +251,24 @@ def test_signup_dropdown_countries_TC_15(driver):
     log.info(f"{test_signup_dropdown_countries_TC_15} >>>>>>>>>>>>>>>>> started")
     user_signup_page.click_on_signup_tab()
     user_signup_page.accept_cookies()
-    dropdown = user_signup_page.dropdown_xpath_locator
-    # options = user_signup_page.get_dropdown_element_text()
-    # print(options)
-    # items = user_signup_page.get_element_list(user_signup_page.country_dropdown_list_xpath_locator)
-    # items_text = user_signup_page.get_dropdown_element_text()
-    # print(items_text)
-    user_signup_page.click_on_dropdown()
-    print(user_signup_page.get_selected_country())
-    dropdown_length = (user_signup_page.get_selected_country())
-    print(len(dropdown_length))
+
+    options_list_1 = SignupPage.get_options(driver)
+    print("Options List 1:", options_list_1)
+
+    options_list_2 = SignupPage.get_options(driver)
+    print("Options List 2:", options_list_2)
+
+    missing_in_site, extra_in_site = user_signup_page.compare_options(options_list_1, options_list_2)
+    if not missing_in_site and not extra_in_site:
+        print("The options match exactly.")
+    else:
+        if missing_in_site:
+            print("Missing in site options:", missing_in_site)
+        if extra_in_site:
+            print("Extra in site options:", extra_in_site)
+
+    assert not missing_in_site, f"Missing in site options: {missing_in_site}"
+    assert not extra_in_site, f"Extra in site options: {extra_in_site}"
     log.info(f"{test_signup_dropdown_countries_TC_15} >>>>>>>>>>>>>>>>> finished")
 
 

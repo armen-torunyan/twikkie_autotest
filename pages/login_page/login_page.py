@@ -49,13 +49,20 @@ class LoginPage(BasePage):
     dropdown_logout_button_xpath_locator = "//a[contains(text(),'Log Out')]"
     dashboard_text_xpath_locator = "//h3[contains(text(),'Dashboard')]"
     invalid_credentials_xpath_locator = "//h4[contains(text(),' Invalid Credentials! ')]"
+    otp_field_xpath_locator = '//input[@id="otp"]'
 
     signup_page_main_text_xpath_locator = '//div[@class="heading_outer"]'
+    verify_otp_text_xpath_locator = "//h4[contains(text(),'Verify OTP !')]"
+    verify_button_xpath_locator = '//button[@class="btn btn-submit btn-login login_button_content"]'
+    otp_required_validation_message_xpath_locator = "//div/div[contains(text(), ' OTP is required to proceed.')]"
+    invalid_otp_error_message_xpath_locator = "//h4[contains(text(),' Invalid OTP! ')]"
 
     # Test data
     VALID_USERNAME = "demo@twikkie.com"
     VALID_PASSWORD = "Demo123#"
+    INVALID_OTP = "12546"
     DOMAIN_NAME = "Demo"
+    DOMAIN_NAME_TESTAUTO = "testauto"
     WRONG_DOMAIN_NAME = "Wrong"
     INVALID_DOMAIN_NAME = "de"
     LOGIN_PAGE_TEXT = 'Company Login'
@@ -65,8 +72,11 @@ class LoginPage(BasePage):
     INVALID_PASSWORD = 'DEMO'
     VALID_USERNAME1 = 'vardanyan.gago@gmail.com'
     VALID_PASSWORD1 = 'User123456'
+    VALID_USERNAME2 = 'gagiktest05@gmail.com'
+    VALID_PASSWORD2 = 'LkZNayDF'
     URL_ADMIN_SUBDIRECTORY = 'admin'
     URL_COMPANY_SUBDIRECTORY = 'company'
+    URL_VERIFY_OTP_SUBDIRECTORY = 'verify_otp'
 
     # Error messages
     DOMAIN_NAME_ERROR_MESSAGE = 'This Domain Does Not Exist In Our System'
@@ -76,6 +86,8 @@ class LoginPage(BasePage):
     INVALID_PASSWORD_ERROR_MESSAGE = 'Invalid Password '
     INVALID_EMAIL_ADDRESS_ERROR_MESSAGE = 'Invalid Email Address '
     INVALID_CREDENTIALS = 'Invalid Credentials!'
+    OTP_REQUIRED_VALIDATION_MESSAGE = 'OTP is required to proceed.'
+    INVALID_OTP_ERROR_MESSAGE = 'Invalid OTP!'
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -145,6 +157,9 @@ class LoginPage(BasePage):
     def validate_signup_link(self):
         return self.get_element(self.signup_link_xpath_locator, locator_type='xpath').is_displayed()
 
+    def validate_verify_otp_text(self):
+        return self.get_element(self.verify_otp_text_xpath_locator).is_displayed()
+
     def click_on_signup_link(self):
         return self.element_click(self.signup_link_xpath_locator, locator_type='xpath')
 
@@ -184,6 +199,12 @@ class LoginPage(BasePage):
     def get_invalid_credentials_error_message(self):
         return self.get_text(self.invalid_credentials_xpath_locator)
 
+    def get_otp_required_validation_message(self):
+        return self.get_text(self.otp_required_validation_message_xpath_locator)
+
+    def get_invalid_otp_error_message(self):
+        return self.get_text(self.invalid_otp_error_message_xpath_locator)
+
     def validate_invalid_password_error_message(self):
         return self.get_element(self.INVALID_PASSWORD_ERROR_MESSAGE).is_displayed()
 
@@ -199,6 +220,12 @@ class LoginPage(BasePage):
     def click_on_logout_button(self):
         self.element_click(self.profile_details_dropdown_icon_xpath_locator)
         self.element_click(self.dropdown_logout_button_xpath_locator)
+
+    def fill_otp_field(self, otp):
+        self.send_keys(otp, self.username_field_xpath_locator)
+
+    def click_on_verify_button(self):
+        self.element_click(self.verify_button_xpath_locator)
 
     def validate_dashboard_text(self):
         return self.is_element_present(self.dashboard_text_xpath_locator)
