@@ -9,6 +9,7 @@ from selenium.webdriver.support.select import Select
 
 import utilities.custom_logger as cl
 from utilities.util import Util
+from utilities import get_link_from_email
 from pages.signup_page.signup_page import SignupPage
 
 
@@ -243,6 +244,7 @@ def test_signup_with_invalid_email_format_TC_14(driver):
     log.info(f"{test_signup_with_invalid_email_format_TC_14} >>>>>>>>>>>>>>>>> finished")
 
 
+
 @mark.regression
 @mark.smoke
 def test_signup_dropdown_countries_TC_15(driver):
@@ -251,24 +253,10 @@ def test_signup_dropdown_countries_TC_15(driver):
     log.info(f"{test_signup_dropdown_countries_TC_15} >>>>>>>>>>>>>>>>> started")
     user_signup_page.click_on_signup_tab()
     user_signup_page.accept_cookies()
-
     options_list_1 = SignupPage.get_options(driver)
-    print("Options List 1:", options_list_1)
-
-    options_list_2 = SignupPage.get_options(driver)
-    print("Options List 2:", options_list_2)
-
-    missing_in_site, extra_in_site = user_signup_page.compare_options(options_list_1, options_list_2)
-    if not missing_in_site and not extra_in_site:
-        print("The options match exactly.")
-    else:
-        if missing_in_site:
-            print("Missing in site options:", missing_in_site)
-        if extra_in_site:
-            print("Extra in site options:", extra_in_site)
-
-    assert not missing_in_site, f"Missing in site options: {missing_in_site}"
-    assert not extra_in_site, f"Extra in site options: {extra_in_site}"
+    options_string = '\n'.join(options_list_1)
+    expected_options_string = user_signup_page.get_selected_country()
+    assert options_string == expected_options_string
     log.info(f"{test_signup_dropdown_countries_TC_15} >>>>>>>>>>>>>>>>> finished")
 
 
@@ -282,7 +270,6 @@ def test_signup_country_selection_from_dropdown_TC_16(driver):
     user_signup_page.accept_cookies()
     user_signup_page.choose_country_from_dropdown(user_signup_page.COUNTRY_NAME)
     assert user_signup_page.COUNTRY_NAME in user_signup_page.get_selected_country()
-    print(user_signup_page.get_selected_country())
     log.info(f"{test_signup_country_selection_from_dropdown_TC_16} >>>>>>>>>>>>>>>>> finished")
 
 
@@ -293,6 +280,7 @@ def test_signup_terms_accept_checkbox_TC_17(driver):
     user_signup_page = SignupPage(driver)
     log.info(f"{test_signup_terms_accept_checkbox_TC_17} >>>>>>>>>>>>>>>>> started")
     user_signup_page.click_on_signup_tab()
+    user_signup_page.accept_cookies()
     user_signup_page.click_on_checkbox()
     assert user_signup_page.check_checkbox_selected()
     log.info(f"{test_signup_terms_accept_checkbox_TC_17} >>>>>>>>>>>>>>>>> finished")
@@ -342,5 +330,23 @@ def test_signup_confirmation_message_TC_19(driver):
     log.info(f"{test_signup_confirmation_message_TC_19} >>>>>>>>>>>>> >>>> finished")
 
 
-
-
+# @mark.regression
+# @mark.smoke
+# def test_signup_email_confirmation_message_TC_20(driver):
+#     log = cl.custom_logger(logging.DEBUG)
+#     user_signup_page = SignupPage(driver)
+#     random_email = Util.random_email()
+#     random_company_name = Util.rand_str()
+#     random_domain_name = Util.rand_str()
+#     log.info(f"{test_signup_email_confirmation_message_TC_20} >>>>>>>>>>>>>>>>> started")
+#     user_signup_page.click_on_signup_tab()
+#     user_signup_page.accept_cookies()
+#     user_signup_page.user_signup(user_signup_page.FIRST_NAME,
+#                                  user_signup_page.LAST_NAME,
+#                                  random_company_name,
+#                                  random_domain_name,
+#                                  random_email,
+#                                  user_signup_page.PHONE)
+#     assert (user_signup_page.get_signup_confirmation_message() ==
+#             user_signup_page.SIGNUP_CONFIRMATION_MESSAGE)
+#     log.info(f"{test_signup_email_confirmation_message_TC_20} >>>>>>>>>>>>> >>>> finished")

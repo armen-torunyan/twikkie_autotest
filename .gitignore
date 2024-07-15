@@ -1,2 +1,14 @@
 # Ignore compiled Python files
 __pycache__/
+
+# Ignore the assets directory
+/assets/
+
+# Ignore automation log files
+automation.log
+
+# Ignore the reports directory
+/reports/
+
+# Ignore the .idea directory (assuming it's at the root of your project)
+.idea/

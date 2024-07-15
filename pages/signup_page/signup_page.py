@@ -14,7 +14,6 @@ import logging
 from selenium import webdriver
 
 
-
 class SignupPage(BasePage):
     """
     *****
@@ -65,7 +64,6 @@ class SignupPage(BasePage):
     setup_twikkie_company_account_message_xpath_locator = "//h4[contains(text(),'Please hold tight as we set up your Twikkie Company Account')]"
     signup_confirmation_message_xpath_locator = '//div[@class="welcome_twikkie_right_part_heading"]/h4[contains(text(),"Check your email!")]'
     # successfully_registered_email_xpath_locator = f'//div[@class="welcome_twikkie_right_part_heading"]/p/a[contains(text(),"{email}")]'
-
 
     # Test data
     TWIKKIE_URL = 'http://172.105.53.207/'
@@ -167,7 +165,6 @@ class SignupPage(BasePage):
     def get_first_name_field_validation_message(self):
         return self.get_text(self.first_name_validation_message_xpath_locator)
 
-
     def get_signup_confirmation_message(self):
         return self.get_text(self.signup_confirmation_message_xpath_locator)
 
@@ -240,8 +237,8 @@ class SignupPage(BasePage):
     def choose_country_from_dropdown(self, country):
         self.select_item_from_drop_down_list(self.get_element(self.dropdown_xpath_locator), 'text', country)
 
-     # def select_country_from_dropdown(self, country):
-     #     self.COUNTRY_NAME.select_by_visible_text(country)
+    # def select_country_from_dropdown(self, country):
+    #     self.COUNTRY_NAME.select_by_visible_text(country)
 
     def user_signup(self, firstname, lastname, company, domain, email, phone):
         try:
@@ -260,7 +257,6 @@ class SignupPage(BasePage):
 
     def click_on_dropdown(self):
         return self.element_click(self.dropdown_xpath_locator)
-
 
     def dropdown_list_options(self):
         return self.get_element(self.country_dropdown_list_xpath_locator)
@@ -290,4 +286,3 @@ class SignupPage(BasePage):
         missing_in_site = [opt for opt in options_list_1 if opt not in options_list_2]
         extra_in_site = [opt for opt in options_list_2 if opt not in options_list_1]
         return missing_in_site, extra_in_site
-

@@ -24,4 +24,6 @@ pip install unipath
 timeout 1
 pip install webdriver-manager
 timeout 1
+pip install beautifulsoup4
+timeout 1
 echo  Installation Finished
