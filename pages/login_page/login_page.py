@@ -1,7 +1,6 @@
 import time
 from traceback import print_stack
 
-from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -9,7 +8,6 @@ from base.base_page import BasePage
 import utilities.custom_logger as cl
 import logging
 
-from utilities import get_link_from_email
 from utilities import get_data_from_email
 
 
@@ -67,6 +65,7 @@ class LoginPage(BasePage):
     submit_password_reset_xpath_locator = '//button[@class="btn btn-submit btn-login login_button_content"]'
     reset_password_text_xpath_locator = "//h4[contains(text(),'Reset Password!')]"
     operation_successful_xpath_locator = "//h4[contains(text(),'Operation Successful. ')]"
+    personnel_tab_xpath_locator = '//div[@id="headingOne"]//p[contains(text()," Personnel")]'
 
     # Test data
     VALID_USERNAME = "demo@twikkie.com"
@@ -91,10 +90,17 @@ class LoginPage(BasePage):
     NEW_PASSWORD = 'U7L2CoOy'
     URL_ADMIN_SUBDIRECTORY = 'admin'
     URL_COMPANY_SUBDIRECTORY = 'company'
+    URL_LOGIN_SUBDIRECTORY = 'login'
     URL_VERIFY_OTP_SUBDIRECTORY = 'verify_otp'
     RESET_PASSWORD_TEXT = 'Reset Password!'
     INVALID_OTP_TEXT = 'Invalid OTP'
     TWIKKIE_LOGIN_PAGE = 'http://172.105.53.207/company'
+
+    #EMAIL DATA
+    user = 'gagiktest05@gmail.com'
+    password = 'enggxzorbndjspax'
+    imap_url = 'imap.gmail.com'
+
 
     # Error and validation messages
     DOMAIN_NAME_ERROR_MESSAGE = 'This Domain Does Not Exist In Our System'
@@ -162,6 +168,7 @@ class LoginPage(BasePage):
         try:
             self.send_keys(username, self.username_field_xpath_locator, locator_type='xpath')
             self.send_keys(password, self.password_field_id_locator, locator_type='id')
+            self.accept_cookies()
             self.element_click(self.login_button_xpath_locator, locator_type='xpath')
             # element = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH,
             #                                                                            self.login_button_xpath_locator)))
@@ -220,26 +227,26 @@ class LoginPage(BasePage):
         self.navigate_to_forget_password_page()
         self.fill_forgot_password_email_field(email)
         self.click_on_reset_password_button()
-        time.sleep(20)
-        link = get_data_from_email.get_latest_email()
+        time.sleep(10)
+        link = get_data_from_email.get_latest_email(self.user, self.password, self.imap_url)
         self.navigate_to_new_url(link)
         time.sleep(3)
         self.submit_reset_password(new_password, confirm_password)
 
-    def change_password_and_login_via_new_password(self, email, domain_name, new_password, confirm_password):
-        self.navigate_to_domain_page()
-        self.submit_domain_name(domain_name)
-        self.accept_cookies()
-        self.navigate_to_forget_password_page()
-        self.fill_forgot_password_email_field(email)
-        self.click_on_reset_password_button()
-        time.sleep(20)
-        link = get_data_from_email.get_latest_email()
-        self.navigate_to_new_url(link)
-        time.sleep(3)
-        self.submit_reset_password(new_password, confirm_password)
-        self.submit_domain_name(domain_name)
-        self.user_login(email, new_password)
+    # def change_password_and_login_via_new_password(self, email, domain_name, new_password, confirm_password):
+    #     self.navigate_to_domain_page()
+    #     self.submit_domain_name(domain_name)
+    #     self.accept_cookies()
+    #     self.navigate_to_forget_password_page()
+    #     self.fill_forgot_password_email_field(email)
+    #     self.click_on_reset_password_button()
+    #     time.sleep(10)
+    #     link = get_data_from_email.get_latest_email()
+    #     self.navigate_to_new_url(link)
+    #     time.sleep(3)
+    #     self.submit_reset_password(new_password, confirm_password)
+    #     self.submit_domain_name(domain_name)
+    #     self.user_login(email, new_password)
 
     def validate_forget_password_button(self):
         return self.is_element_present(self.forgot_password_xpath_locator)

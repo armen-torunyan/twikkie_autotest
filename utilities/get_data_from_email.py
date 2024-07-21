@@ -4,12 +4,8 @@ import re
 from email.header import decode_header
 from bs4 import BeautifulSoup
 
-user = 'gagiktest05@gmail.com'
-password = 'enggxzorbndjspax'
-imap_url = 'imap.gmail.com'
 
-
-def get_latest_otp():
+def get_latest_otp(user, password, imap_url):
     def get_body(msg):
         if msg.is_multipart():
             for part in msg.walk():
@@ -92,7 +88,7 @@ def get_latest_otp():
     return otp_code
 
 
-def get_latest_email():
+def get_latest_email(user, password, imap_url):
     def get_body(msg):
         if msg.is_multipart():
             for part in msg.walk():

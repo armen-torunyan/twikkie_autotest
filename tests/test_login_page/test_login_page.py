@@ -175,9 +175,9 @@ def test_user_successfully_change_password_TC_13(driver):
     user_login_page.navigate_to_forget_password_page()
     user_login_page.fill_forgot_password_email_field(user_login_page.VALID_USERNAME2)
     user_login_page.click_on_reset_password_button()
-    time.sleep(10)
-    link = get_data_from_email.get_latest_email()
-    time.sleep(10)
+    time.sleep(5)
+    link = get_data_from_email.get_latest_email(user_login_page.user, user_login_page.password, user_login_page.imap_url)
+    time.sleep(5)
     user_login_page.navigate_to_new_url(link)
     assert user_login_page.get_reset_password_page_text() == user_login_page.RESET_PASSWORD_TEXT
     user_login_page.submit_reset_password(user_login_page.NEW_PASSWORD, user_login_page.NEW_PASSWORD)
@@ -202,22 +202,23 @@ def test_user_successfully_login_with_new_password_TC_14(driver):
     user_login_page.fill_forgot_password_email_field(user_login_page.VALID_USERNAME2)
     user_login_page.click_on_reset_password_button()
     time.sleep(10)
-    link = get_data_from_email.get_latest_email()
-    time.sleep(10)
+    link = get_data_from_email.get_latest_email(user_login_page.user, user_login_page.password, user_login_page.imap_url)
+    time.sleep(5)
     user_login_page.navigate_to_new_url(link)
     user_login_page.submit_reset_password(user_login_page.NEW_PASSWORD, user_login_page.NEW_PASSWORD)
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.NEW_PASSWORD)
     assert (user_login_page.get_operation_successful_validation_message() ==
             user_login_page.OPERATION_SUCCESSFUL_VALIDATION_MESSAGE)
-    time.sleep(20)
-    otp = get_otp_from_email.get_latest_otp()
+    time.sleep(10)
+    otp = get_data_from_email.get_latest_otp(user_login_page.user, user_login_page.password, user_login_page.imap_url)
     user_login_page.fill_otp_field(otp)
     user_login_page.click_on_verify_button()
     time.sleep(5)
     assert user_login_page.URL_ADMIN_SUBDIRECTORY in driver.current_url
     user_login_page.change_password(user_login_page.VALID_USERNAME2, user_login_page.DOMAIN_NAME_2,
                                     user_login_page.VALID_PASSWORD2, user_login_page.VALID_PASSWORD2)
+    time.sleep(2)
     log.info(f"{test_user_successfully_login_with_new_password_TC_14} >>>>>>>>>>>>>>>>> finished")
 
 
@@ -233,9 +234,9 @@ def test_login_via_old_password_returns_error_message_TC_15(driver):
     user_login_page.navigate_to_forget_password_page()
     user_login_page.fill_forgot_password_email_field(user_login_page.VALID_USERNAME2)
     user_login_page.click_on_reset_password_button()
-    time.sleep(10)
-    link = get_data_from_email.get_latest_email()
-    time.sleep(10)
+    time.sleep(5)
+    link = get_data_from_email.get_latest_email(user_login_page.user, user_login_page.password, user_login_page.imap_url)
+    time.sleep(5)
     user_login_page.navigate_to_new_url(link)
     user_login_page.submit_reset_password(user_login_page.NEW_PASSWORD, user_login_page.NEW_PASSWORD)
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
@@ -392,9 +393,13 @@ def test_login_system_back_button_TC_25(driver):
     user_login_page = LoginPage(driver)
     log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
-    user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
+    user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
     user_login_page.accept_cookies()
-    user_login_page.user_login(user_login_page.VALID_USERNAME, user_login_page.VALID_PASSWORD)
+    user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
+    time.sleep(5)
+    otp = get_data_from_email.get_latest_otp(user_login_page.user, user_login_page.password, user_login_page.imap_url)
+    user_login_page.fill_otp_field(otp)
+    user_login_page.click_on_verify_button()
     user_login_page.click_on_later_button()
     time.sleep(2)
     user_login_page.click_on_logout_button()
@@ -446,7 +451,7 @@ def test_that_user_cannot_proceed_with_invalid_OTP_code_TC_28(driver):
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
     user_login_page.accept_cookies()
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
-    time.sleep(10)
+    # time.sleep(10)
     user_login_page.fill_otp_field(user_login_page.INVALID_OTP)
     user_login_page.click_on_verify_button()
     assert (user_login_page.get_invalid_otp_error_message() ==
@@ -475,6 +480,7 @@ def test_user_cannot_attempt_wrong_OTP_more_than_7_times_TC_29(driver):
             user_login_page.LOCKED_ACCOUNT_VALIDATION_MESSAGE)
     user_login_page.change_password(user_login_page.VALID_USERNAME2, user_login_page.DOMAIN_NAME_2,
                                     user_login_page.VALID_PASSWORD2, user_login_page.VALID_PASSWORD2)
+    time.sleep(2)
     log.info(f"{test_user_cannot_attempt_wrong_OTP_more_than_7_times_TC_29} >>>>>>>>>>>>>>>>> finished")
 
 
@@ -494,7 +500,7 @@ def test_user_cannot_attempt_wrong_OTP_more_than_7_times_and_reset_password_TC_3
     assert (user_login_page.get_locked_account_validation_message() ==
             user_login_page.LOCKED_ACCOUNT_VALIDATION_MESSAGE)
     time.sleep(10)
-    link = get_data_from_email.get_latest_email()
+    link = get_data_from_email.get_latest_email(user_login_page.user, user_login_page.password, user_login_page.imap_url)
     user_login_page.navigate_to_new_url(link)
     user_login_page.submit_reset_password(user_login_page.VALID_PASSWORD2, user_login_page.VALID_PASSWORD2)
     assert (user_login_page.get_operation_successful_validation_message() ==
@@ -527,6 +533,7 @@ def test_that_user_cannot_login_without_resecting_their_password_as_instructed_T
             user_login_page.LOCKED_ACCOUNT_VALIDATION_MESSAGE)
     user_login_page.change_password(user_login_page.VALID_USERNAME2, user_login_page.DOMAIN_NAME_2,
                                     user_login_page.VALID_PASSWORD2, user_login_page.VALID_PASSWORD2)
+    time.sleep(2)
     log.info(
         f"{test_that_user_cannot_login_without_resecting_their_password_as_instructed_TC_31} >>>>>>>>>>>>>>>>> finished")
 
@@ -546,8 +553,8 @@ def test_user_successfully_resect_password_via_received_reset_password_link_sent
     user_login_page.fill_invalid_otp_code_multiple_times()
     assert (user_login_page.get_locked_account_validation_message() ==
             user_login_page.LOCKED_ACCOUNT_VALIDATION_MESSAGE)
-    time.sleep(10)
-    link = get_data_from_email.get_latest_email()
+    time.sleep(5)
+    link = get_data_from_email.get_latest_email(user_login_page.user, user_login_page.password, user_login_page.imap_url)
     user_login_page.navigate_to_new_url(link)
     user_login_page.submit_reset_password(user_login_page.VALID_PASSWORD2, user_login_page.VALID_PASSWORD2)
     assert (user_login_page.get_operation_successful_validation_message() ==
@@ -564,13 +571,36 @@ def test_that_user_login_with_valid_OTP_code_TC_33(driver):
     log.info(f"{test_that_user_login_with_valid_OTP_code_TC_33} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
-    time.sleep(10)
     user_login_page.accept_cookies()
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
-    time.sleep(8)
-    otp = get_data_from_email.get_latest_otp()
+    time.sleep(5)
+    otp = get_data_from_email.get_latest_otp(user_login_page.user, user_login_page.password, user_login_page.imap_url)
     user_login_page.fill_otp_field(otp)
     user_login_page.click_on_verify_button()
-    time.sleep(10)
+    time.sleep(5)
     assert user_login_page.URL_ADMIN_SUBDIRECTORY in driver.current_url
     log.info(f"{test_that_user_login_with_valid_OTP_code_TC_33} >>>>>>>>>>>>>>>>> finished")
+
+
+@mark.regression
+@mark.smoke
+def test_that_user_can_successfully_logout_TC_34(driver):
+    log = cl.custom_logger(logging.DEBUG)
+    user_login_page = LoginPage(driver)
+    log.info(f"{test_that_user_can_successfully_logout_TC_34} >>>>>>>>>>>>>>>>> started")
+    user_login_page.navigate_to_domain_page()
+    user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
+    user_login_page.accept_cookies()
+    user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
+    time.sleep(5)
+    otp = get_data_from_email.get_latest_otp(user_login_page.user, user_login_page.password, user_login_page.imap_url)
+    user_login_page.fill_otp_field(otp)
+    user_login_page.click_on_verify_button()
+    time.sleep(5)
+    assert user_login_page.URL_ADMIN_SUBDIRECTORY in driver.current_url
+    user_login_page.click_on_later_button()
+    user_login_page.click_on_logout_button()
+    assert user_login_page.URL_LOGIN_SUBDIRECTORY in driver.current_url
+    log.info(f"{test_that_user_can_successfully_logout_TC_34} >>>>>>>>>>>>>>>>> finished")
+
+
