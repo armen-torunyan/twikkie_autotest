@@ -28,7 +28,7 @@ class LoginPage(BasePage):
     domain_page_text_xpath_locator = '//div[@class="twikkie_main_head_right_part_heading"]/h4'
     username_field_xpath_locator = '//input[@id="userName"]'
     password_field_id_locator = "password"
-    login_button_xpath_locator = '//div//button[@class="btn btn-submit btn-login login_button_content"]'
+    login_button_xpath_locator = '/html/body/app-root/div/app-home/div[2]/app-login/div/div/div/div[2]/div/form/div/div[4]/button'
     signup_link_text_button_xpath_locator = '//div[@class="form-group"]/p/a'
     submit_button_xpath_locator = '//button[@class="login_popup_btn"]'
     domain_name_id_locator = "companyName"
@@ -52,6 +52,7 @@ class LoginPage(BasePage):
     dashboard_text_xpath_locator = "//h3[contains(text(),'Dashboard')]"
     invalid_credentials_xpath_locator = "//h4[contains(text(),' Invalid Credentials! ')]"
     otp_field_xpath_locator = '//input[@id="otp"]'
+    accept_cookies_xpath_locator = '//button[contains(text(), "Accept")]'
 
     signup_page_main_text_xpath_locator = '//div[@class="heading_outer"]'
     verify_otp_text_xpath_locator = "//h4[contains(text(),'Verify OTP !')]"
@@ -168,11 +169,8 @@ class LoginPage(BasePage):
         try:
             self.send_keys(username, self.username_field_xpath_locator, locator_type='xpath')
             self.send_keys(password, self.password_field_id_locator, locator_type='id')
-            self.accept_cookies()
+            # self.accept_cookies()
             self.element_click(self.login_button_xpath_locator, locator_type='xpath')
-            # element = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH,
-            #                                                                            self.login_button_xpath_locator)))
-            # element.click()
         except:
             self.log.info("UNABLE TO LOGIN")
             print_stack()
@@ -302,16 +300,6 @@ class LoginPage(BasePage):
             time.sleep(1)
             self.click_on_verify_button()
 
-    # def fill_invalid_otp_code_multiple_times(self):
-    #     for _ in range(7):
-    #         self.get_otp_filed().clear()
-    #         time.sleep(1)
-    #         self.fill_otp_field(self.INVALID_OTP)
-    #         self.click_on_verify_button()
-
-    # def clear_otp_field(self):
-    #     otp_field = self.get_otp_filed()
-    #     otp_field.clear()
 
     def fill_confirm_password_field(self, password):
         return self.send_keys(password, self.confirm_password_field_xpath_locator)
@@ -338,7 +326,8 @@ class LoginPage(BasePage):
         return self.is_element_present(self.dashboard_text_xpath_locator)
 
     def accept_cookies(self):
-        self.element_click('//div[@class="Cookie_btn"]//button[1]')
+        time.sleep(1)
+        self.element_click(self.accept_cookies_xpath_locator)
 
     def navigate_back_and_forward(self):
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH,

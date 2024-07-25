@@ -1,4 +1,5 @@
 # import email
+import random
 import time
 from traceback import print_stack
 
@@ -60,6 +61,18 @@ class SettingsCompanyPage(BasePage):
 
     first_name_field_xpath_locator = f'({first_and_last_names_field_xpath_locator})[1]'
     last_name_field_xpath_locator = f'({first_and_last_names_field_xpath_locator})[2]'
+
+    dropdowns_xpath_locator = '//div//select[@class="form-control"]'
+    language_dropdown_xpath_locator = f'({dropdowns_xpath_locator})[1]'
+    country_dropdown_xpath_locator = f'({dropdowns_xpath_locator})[2]'
+    default_currency_xpath_locator = f'({dropdowns_xpath_locator})[3]'
+    industry_xpath_locator = f'({dropdowns_xpath_locator})[4]'
+    timezone_xpath_locator = f'({dropdowns_xpath_locator})[5]'
+    public_event_xpath_locator = f'({dropdowns_xpath_locator})[6]'
+    custom_event_xpath_locator = f'({dropdowns_xpath_locator})[7]'
+
+    contact_email_field_xpath_locator = '//input[@placeholder="Email"]'
+    address_field_xpath_locator = '//input[@placeholder="Address"]'
     submit_button_xpath_locator = '//button[@class="save"]'
     cancel_button_xpath_locator = '//button[@class="cancel"]'
 
@@ -81,6 +94,7 @@ class SettingsCompanyPage(BasePage):
     COUNTRY = 'Nigeria'
     TIMEZONE = 'Africa/Lagos'
     PUBLIC_EVENT = 'Nigeria Public Holidays'
+    ADDRESS = 'Adonts'
     CONTACT_PERSON_NAME = 'Gagik Vardanyan'
     VALID_PASSWORD = "Demo123#"
     DOMAIN_NAME = "Demo"
@@ -91,6 +105,9 @@ class SettingsCompanyPage(BasePage):
     INVALID_PASSWORD = 'DEMO'
     VALID_USERNAME1 = 'vardanyan.gago@gmail.com'
     VALID_PASSWORD1 = 'User123456'
+    VALID_USERNAME2 = 'gagiktest05@gmail.com'
+    VALID_PASSWORD2 = 'User123456'
+    NEW_VALID_USERNAME = 'gagikvardanyan613@gmail.com'
     URL_ADMIN_SUBDIRECTORY = '/admin'
     URL_COMPANY_SUBDIRECTORY = '/company'
     URL_SIGNUP_SUBDIRECTORY = 'signup'
@@ -104,6 +121,9 @@ class SettingsCompanyPage(BasePage):
     imap_url = 'imap.gmail.com'
 
     # Validation and error messages
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
 
     def check_settings_icon_presence(self):
         return self.element_presence_check(self.settings_icon_xpath_locator)
@@ -116,6 +136,9 @@ class SettingsCompanyPage(BasePage):
 
     def click_on_setting_icon(self):
         return self.element_click(self.settings_icon_xpath_locator)
+
+    def click_on_first_name_field(self):
+        return self.element_click(self.first_name_field_xpath_locator)
 
     def click_on_edit_icon(self):
         try:
@@ -169,6 +192,15 @@ class SettingsCompanyPage(BasePage):
         except:
             return None
 
+    def get_selected_option_text_from_dropdown(self):
+        return self.get_text(self.language_dropdown_xpath_locator)
+
+    def get_dropdown(self, index):
+        return self.get_element(f'({self.dropdowns_xpath_locator})[{index}]')
+
+    def fill_address_input_field(self, address):
+        return self.send_keys(address, self.address_field_xpath_locator)
+
     def check_domain_name_has_readonly_attribute(self):
         element = self.get_domain_name_filed()
         if element is None:
@@ -208,7 +240,7 @@ class SettingsCompanyPage(BasePage):
     def edit_first_and_last_name_from_company_module(self, first_name, last_name):
         self.click_on_setting_icon()
         self.click_on_company_module()
-        time.sleep(10)
+        time.sleep(5)
         self.click_on_edit_icon()
         time.sleep(2)
         self.element_click(self.first_name_field_xpath_locator)
@@ -219,6 +251,26 @@ class SettingsCompanyPage(BasePage):
         self.fill_input_field(last_name, self.last_name_field_xpath_locator)
         self.scroll_into_view(self.submit_button_xpath_locator)
         self.click_on_submit_button()
+        time.sleep(2)
+
+    def edit_email_address_from_company_module(self, email):
+        self.click_on_setting_icon()
+        self.click_on_company_module()
+        time.sleep(5)
+        self.click_on_edit_icon()
+        self.clear_input_fields(self.contact_email_field_xpath_locator)
+        self.fill_input_field(email, self.contact_email_field_xpath_locator)
+        self.scroll_into_view(self.submit_button_xpath_locator)
+        self.click_on_submit_button()
+
+    def clear_first_name_field(self):
+        return self.clear_input_fields(self.first_name_field_xpath_locator)
+
+    def navigate_to_edit_form(self):
+        self.click_on_setting_icon()
+        self.click_on_company_module()
+        time.sleep(5)
+        self.click_on_edit_icon()
 
     # def edit_texts_from_company_module_fields(self, fields_texts):
     #     self.click_on_setting_icon()
@@ -247,6 +299,41 @@ class SettingsCompanyPage(BasePage):
         login_page.click_on_login_button()
         login_page.click_on_later_button()
         self.click_on_setting_icon()
+
+    def select_random_option_from_dropdown(self, locator):
+        try:
+            select_element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, locator))
+            )
+            select = Select(select_element)
+
+            all_options = select.options
+            random_option = random.choice(all_options)
+
+            select.select_by_visible_text(random_option.text)
+
+            return random_option.text
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None
+
+    def get_automatically_selected_currency(self, currency_locator):
+        try:
+            currency_select_element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, currency_locator))
+            )
+            currency_select = Select(currency_select_element)
+            selected_currency = currency_select.first_selected_option
+
+            return selected_currency.text
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None
+
+    def get_text_from_dropdown(self, locator):
+        self.get_text(locator)
 
     def validate_company_module_page_data(self):
         if self.get_filled_input_field(self.DOMAIN_NAME) != self.DOMAIN_NAME:
@@ -287,3 +374,23 @@ class SettingsCompanyPage(BasePage):
         self.element_presence_check(self.custom_event_text_xpath_locator)
         self.element_presence_check(self.country_text_xpath_locator)
         self.element_presence_check(self.logo_text_xpath_locator)
+
+    # def choose_options_from_dropdowns_and_validate_choosen_option_text(self):
+    #     selected_language = self.select_random_option_from_dropdown(self.language_dropdown_xpath_locator)
+    #     selected_country = self.select_random_option_from_dropdown(self.country_dropdown_xpath_locator)
+    #     self.fill_address_input_field(self.ADDRESS)
+    #     selected_default_currency = self.select_random_option_from_dropdown(self.default_currency_xpath_locator)
+    #     selected_industry = self.select_random_option_from_dropdown(self.industry_xpath_locator)
+    #     selected_timezone = self.select_random_option_from_dropdown(self.timezone_xpath_locator)
+    #     selected_public_event = self.select_random_option_from_dropdown(self.public_event_xpath_locator)
+    #     selected_custom_event = self.select_random_option_from_dropdown(self.custom_event_xpath_locator)
+    #     self.click_on_submit_button()
+    #
+    #     assert (self.get_filled_input_field(self.language_dropdown_xpath_locator) == selected_language)
+    #     assert (self.get_filled_input_field(self.country_dropdown_xpath_locator) == selected_country)
+    #     assert (self.get_filled_input_field(self.default_currency_xpath_locator) == selected_default_currency)
+    #     assert (self.get_filled_input_field(self.industry_xpath_locator) == selected_industry)
+    #     assert (self.get_filled_input_field(self.timezone_xpath_locator) == selected_timezone)
+    #     assert (self.get_filled_input_field(self.public_event_xpath_locator) == selected_public_event)
+    #     assert (self.get_filled_input_field(self.custom_event_xpath_locator) == selected_custom_event)
+
