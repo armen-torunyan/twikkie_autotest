@@ -1,17 +1,13 @@
-# import email
 import time
 from traceback import print_stack
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from base import base_page
 from base.base_page import BasePage
 import utilities.custom_logger as cl
 import logging
-from selenium import webdriver
 
 
 class SignupPage(BasePage):
@@ -42,7 +38,7 @@ class SignupPage(BasePage):
     domain_name_field_xpath_locator = '//input[@placeholder="One word with no space"]'
     company_email_field_xpath_locator = '//input[@placeholder="Enter your Email"]'
     company_phone_field_xpath_locator = '//input[@placeholder="Enter your Phone no."]'
-    submit_button_xpath_locator = '//button[@class="btn btn-submit btn-login"]'
+    submit_button_xpath_locator = '//div[@class="Sign_Up_btn"]'
     terms_and_conditions_checkbox_xpath_locator = '//div//input[@id="flexCheckDefault"]'
     dropdown_xpath_locator = '//div//select[@class="form-control"]'
     country_dropdown_list_xpath_locator = '//select[@class="form-control"]/option'
@@ -55,7 +51,6 @@ class SignupPage(BasePage):
     invalid_phone_format_validation_message_xpath_locator = "//div[contains(text(),'Invalid phone number!')]"
     company_country_validation_message_xpath_locator = "//div[contains(text(),'Country is required!')]"
     signup_submit_form_error_message_xpath_locator = "//h4[contains(text(),'  Please read and accept the Terms & Conditions. ')]"
-    # registered_email_id_error_message_xpath_locator = "//h4[contains(text(),'  Please read and accept the Terms & Conditions. ')]"
     invalid_email_format_validation_message_xpath_locator = "//div[contains(text(),'Your email address must be valid.')]"
     registered_email_id_error_message_xpath_locator = "//h4[contains(text(),'We are sorry, but the email ID you provided seems to already exist in our system. Try logging in or using a different email ID.')]"
     already_taken_company_name_error_message_xpath_locator = "//h4[contains(text(),'Our system shows that a company with the same name already exists.')]"
@@ -64,6 +59,11 @@ class SignupPage(BasePage):
     setup_twikkie_company_account_message_xpath_locator = "//h4[contains(text(),'Please hold tight as we set up your Twikkie Company Account')]"
     signup_confirmation_message_xpath_locator = '//div[@class="welcome_twikkie_right_part_heading"]/h4[contains(text(),"Check your email!")]'
     # successfully_registered_email_xpath_locator = f'//div[@class="welcome_twikkie_right_part_heading"]/p/a[contains(text(),"{email}")]'
+    personnel_tab_xpath_locator = '//div[@id="headingOne"]//p[contains(text()," Personnel")]'
+    self_service_xpath_locator = "//a[contains(text(),' Self Service ')]"
+    profile_checkbox_xpath_locator = '//div[@class="active_box"]//input'
+    account_delete_button_xpath_locator = '//span[@class="filter_delete_item"]'
+    captcha_element_xpath_locator = '//div[@class="captcha_bar"]'
 
     # Test data
     TWIKKIE_URL = 'http://172.105.53.207/'
@@ -76,6 +76,7 @@ class SignupPage(BasePage):
     REGISTERED_EMAIL = "demo@twikkie.com"
     UNREGISTERED_EMAIL = "kelir86121@apn7.com"
     VALID_PASSWORD = "Demo123#"
+    DOMAIN_NAME_3 = "autotesting"
     DOMAIN_NAME = "Demo"
     NEW_DOMAIN_NAME = "TEST"
     WRONG_DOMAIN_NAME = "Wrong"
@@ -85,11 +86,18 @@ class SignupPage(BasePage):
     INVALID_USERNAME = 'demo@twikie.com'
     INVALID_PASSWORD = 'DEMO'
     VALID_USERNAME1 = 'vardanyan.gago@gmail.com'
+    VALID_USERNAME3 = 'gagikvardanyan613@gmail.com'
     VALID_PASSWORD1 = 'User123456'
     URL_ADMIN_SUBDIRECTORY = '/admin'
     URL_COMPANY_SUBDIRECTORY = '/company'
     URL_SIGNUP_SUBDIRECTORY = 'signup'
     COUNTRY_NAME = 'Armenia'
+
+    #email data
+
+    user = 'gagikvardanyan613@gmail.com'
+    password = 'fdjtpxaxagcrqkyq'
+    imap_url = 'imap.gmail.com'
 
     # Validation and error messages
     FIRST_NAME_FIELD_VALIDATION_MESSAGE = 'The first name is required!'
@@ -107,6 +115,10 @@ class SignupPage(BasePage):
     OPERATION_SUCCESSFUL_VALIDATION_MESSAGE = 'Operation Successful.'
     SETUP_TWIKKIE_COMPANY_ACCOUNT_MESSAGE = 'Please hold tight as we set up your Twikkie Company Account'
     SIGNUP_CONFIRMATION_MESSAGE = 'Check your email!'
+
+    def __init__(self, driver):
+        super().__init__(driver)
+        self.driver = driver
 
     def verify_homepage_text(self):
         return self.element_presence_check(self.twikkie_homepage_text_xpath_locator)
@@ -161,6 +173,15 @@ class SignupPage(BasePage):
 
     def click_on_submit_button(self):
         self.element_click(self.submit_button_xpath_locator)
+
+    def click_on_self_service_tab(self):
+        self.element_click(self.self_service_xpath_locator)
+
+    def click_on_profile_checkbox(self):
+        self.element_click(self.profile_checkbox_xpath_locator)
+
+    def click_on_delete_button(self):
+        self.element_click(self.account_delete_button_xpath_locator)
 
     def get_first_name_field_validation_message(self):
         return self.get_text(self.first_name_validation_message_xpath_locator)
@@ -237,9 +258,6 @@ class SignupPage(BasePage):
     def choose_country_from_dropdown(self, country):
         self.select_item_from_drop_down_list(self.get_element(self.dropdown_xpath_locator), 'text', country)
 
-    # def select_country_from_dropdown(self, country):
-    #     self.COUNTRY_NAME.select_by_visible_text(country)
-
     def user_signup(self, firstname, lastname, company, domain, email, phone):
         try:
             self.send_keys(firstname, self.first_name_field_xpath_locator)
@@ -270,6 +288,27 @@ class SignupPage(BasePage):
     def get_selected_country(self):
         return self.get_text(self.dropdown_xpath_locator)
 
+    def get_perosneel_tab(self):
+        return self.get_text(self.personnel_tab_xpath_locator)
+
+    def click_on_personeel_tab(self):
+        self.element_click(self.personnel_tab_xpath_locator)
+
+    def verify_dropdown_list_countries(self):
+        options_list_1 = SignupPage.get_options(self.driver)
+        options_string = '\n'.join(options_list_1)
+        expected_options_string = self.get_selected_country()
+        return options_string == expected_options_string
+
+    def account_deletion(self):
+        self.click_on_personeel_tab()
+        self.click_on_self_service_tab()
+        self.click_on_profile_checkbox()
+        self.click_on_delete_button()
+
+    def get_captcha_element(self):
+        return self.get_element(self.captcha_element_xpath_locator)
+
     @staticmethod
     def get_options(driver):
         select_element = WebDriverWait(driver, 10).until(
@@ -280,9 +319,3 @@ class SignupPage(BasePage):
         options_list = [option.text for option in options]
         print(options_list)
         return options_list
-
-    @staticmethod
-    def compare_options(options_list_1, options_list_2):
-        missing_in_site = [opt for opt in options_list_1 if opt not in options_list_2]
-        extra_in_site = [opt for opt in options_list_2 if opt not in options_list_1]
-        return missing_in_site, extra_in_site

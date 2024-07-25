@@ -1,15 +1,10 @@
 import logging
-import time
-from telnetlib import EC
 
-import pytest
 from pytest import mark
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.select import Select
 
 import utilities.custom_logger as cl
 from utilities.util import Util
-from utilities import get_link_from_email
 from pages.signup_page.signup_page import SignupPage
 
 
@@ -189,7 +184,6 @@ def test_signup_with_same_phone_number_TC_10(driver):
     log.info(f"{test_signup_with_same_phone_number_TC_10} >>>>>>>>>>>>>>>>> finished")
 
 
-
 @mark.regression
 @mark.smoke
 def test_signup_with_already_taken_company_name_TC_11(driver):
@@ -244,7 +238,6 @@ def test_signup_with_invalid_email_format_TC_14(driver):
     log.info(f"{test_signup_with_invalid_email_format_TC_14} >>>>>>>>>>>>>>>>> finished")
 
 
-
 @mark.regression
 @mark.smoke
 def test_signup_dropdown_countries_TC_15(driver):
@@ -253,10 +246,7 @@ def test_signup_dropdown_countries_TC_15(driver):
     log.info(f"{test_signup_dropdown_countries_TC_15} >>>>>>>>>>>>>>>>> started")
     user_signup_page.click_on_signup_tab()
     user_signup_page.accept_cookies()
-    options_list_1 = SignupPage.get_options(driver)
-    options_string = '\n'.join(options_list_1)
-    expected_options_string = user_signup_page.get_selected_country()
-    assert options_string == expected_options_string
+    assert user_signup_page.verify_dropdown_list_countries()
     log.info(f"{test_signup_dropdown_countries_TC_15} >>>>>>>>>>>>>>>>> finished")
 
 
@@ -330,6 +320,41 @@ def test_signup_confirmation_message_TC_19(driver):
     log.info(f"{test_signup_confirmation_message_TC_19} >>>>>>>>>>>>> >>>> finished")
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # @mark.regression
 # @mark.smoke
 # def test_signup_email_confirmation_message_TC_20(driver):
@@ -350,3 +375,25 @@ def test_signup_confirmation_message_TC_19(driver):
 #     assert (user_signup_page.get_signup_confirmation_message() ==
 #             user_signup_page.SIGNUP_CONFIRMATION_MESSAGE)
 #     log.info(f"{test_signup_email_confirmation_message_TC_20} >>>>>>>>>>>>> >>>> finished")
+
+
+# @mark.regression
+# @mark.smoke
+# def test_delete_account(driver):
+#     log = cl.custom_logger(logging.DEBUG)
+#     user_signup_page = SignupPage(driver)
+#     user_login_page = LoginPage(driver)
+#     log.info(f"{test_delete_account} >>>>>>>>>>>>>>>>> started")
+#     user_login_page.navigate_to_domain_page()
+#     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_3)
+#     user_login_page.user_login(user_signup_page.VALID_USERNAME3, user_signup_page.VALID_PASSWORD1)
+#     time.sleep(10)
+#     otp = get_data_from_email.get_latest_otp(user_signup_page.user, user_signup_page.password, user_signup_page.imap_url)
+#     time.sleep(10)
+#     user_login_page.fill_otp_field(otp)
+#     user_login_page.click_on_verify_button()
+#     user_login_page.click_on_later_button()
+#     time.sleep(1)
+#     user_signup_page.account_deletion()
+#     time.sleep(100)
+#     log.info(f"{test_delete_account} >>>>>>>>>>>>> >>>> finished")

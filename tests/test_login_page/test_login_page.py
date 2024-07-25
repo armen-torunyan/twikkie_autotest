@@ -1,12 +1,9 @@
 import logging
 import time
 
-import pytest
 from pytest import mark
 import utilities.custom_logger as cl
 from pages.login_page.login_page import LoginPage
-from utilities import get_otp_from_email
-from utilities import get_link_from_email
 from utilities import get_data_from_email
 
 
@@ -171,7 +168,6 @@ def test_user_successfully_change_password_TC_13(driver):
     log.info(f"{test_user_successfully_change_password_TC_13} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
-    user_login_page.accept_cookies()
     user_login_page.navigate_to_forget_password_page()
     user_login_page.fill_forgot_password_email_field(user_login_page.VALID_USERNAME2)
     user_login_page.click_on_reset_password_button()
@@ -197,13 +193,12 @@ def test_user_successfully_login_with_new_password_TC_14(driver):
     log.info(f"{test_user_successfully_login_with_new_password_TC_14} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
-    user_login_page.accept_cookies()
     user_login_page.navigate_to_forget_password_page()
     user_login_page.fill_forgot_password_email_field(user_login_page.VALID_USERNAME2)
     user_login_page.click_on_reset_password_button()
     time.sleep(10)
     link = get_data_from_email.get_latest_email(user_login_page.user, user_login_page.password, user_login_page.imap_url)
-    time.sleep(5)
+    time.sleep(8)
     user_login_page.navigate_to_new_url(link)
     user_login_page.submit_reset_password(user_login_page.NEW_PASSWORD, user_login_page.NEW_PASSWORD)
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
@@ -230,7 +225,6 @@ def test_login_via_old_password_returns_error_message_TC_15(driver):
     log.info(f"{test_login_via_old_password_returns_error_message_TC_15} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
-    user_login_page.accept_cookies()
     user_login_page.navigate_to_forget_password_page()
     user_login_page.fill_forgot_password_email_field(user_login_page.VALID_USERNAME2)
     user_login_page.click_on_reset_password_button()
@@ -250,55 +244,54 @@ def test_login_via_old_password_returns_error_message_TC_15(driver):
 
 @mark.regression
 @mark.smoke
-def test_login_with_empty_fields_TC_16(driver):
+def test_login_with_empty_fields_TC_17(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_with_empty_fields_TC_16} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_with_empty_fields_TC_17} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
-    user_login_page.accept_cookies()
     user_login_page.click_on_login_button()
     assert user_login_page.get_username_required_error_message() == user_login_page.USERNAME_REQUIRED_ERROR_MESSAGE
     assert user_login_page.get_password_required_error_message() == user_login_page.PASSWORD_REQUIRED_ERROR_MESSAGE
-    log.info(f"{test_login_with_empty_fields_TC_16} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_with_empty_fields_TC_17} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_with_empty_email_field_TC_17(driver):
+def test_login_with_empty_email_field_TC_18(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_with_empty_email_field_TC_17} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_with_empty_email_field_TC_18} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.accept_cookies()
     user_login_page.fill_login_password(user_login_page.VALID_PASSWORD)
     user_login_page.click_on_login_button()
     assert user_login_page.get_username_required_error_message() == user_login_page.USERNAME_REQUIRED_ERROR_MESSAGE
-    log.info(f"{test_login_with_empty_email_field_TC_17} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_with_empty_email_field_TC_18} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_with_empty_password_field_TC_18(driver):
+def test_login_with_empty_password_field_TC_19(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_with_empty_password_field_TC_18} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_with_empty_password_field_TC_19} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.accept_cookies()
     user_login_page.fill_login_email(user_login_page.VALID_USERNAME)
     user_login_page.click_on_login_button()
     assert user_login_page.get_password_required_error_message() == user_login_page.PASSWORD_REQUIRED_ERROR_MESSAGE
-    log.info(f"{test_login_with_empty_password_field_TC_18} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_with_empty_password_field_TC_19} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_with_invalid_email_format_TC_19(driver):
+def test_login_with_invalid_email_format_TC_20(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_with_invalid_email_format_TC_19} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_with_invalid_email_format_TC_20} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.accept_cookies()
@@ -306,15 +299,15 @@ def test_login_with_invalid_email_format_TC_19(driver):
     user_login_page.click_on_login_button()
     assert (user_login_page.get_username_invalid_format_error_message() ==
             user_login_page.USERNAME_INVALID_FORMAT_ERROR_MESSAGE)
-    log.info(f"{test_login_with_invalid_email_format_TC_19} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_with_invalid_email_format_TC_20} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_with_invalid_email_and_valid_password_TC_20(driver):
+def test_login_with_invalid_email_and_valid_password_TC_21(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_with_invalid_email_and_valid_password_TC_20} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_with_invalid_email_and_valid_password_TC_21} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.accept_cookies()
@@ -322,15 +315,15 @@ def test_login_with_invalid_email_and_valid_password_TC_20(driver):
     user_login_page.click_on_login_button()
     assert (user_login_page.get_invalid_credentials_error_message() ==
             user_login_page.INVALID_CREDENTIALS)
-    log.info(f"{test_login_with_invalid_email_and_valid_password_TC_20} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_with_invalid_email_and_valid_password_TC_21} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_with_valid_email_and_invalid_password_TC_21(driver):
+def test_login_with_valid_email_and_invalid_password_TC_22(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_with_valid_email_and_invalid_password_TC_21} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_with_valid_email_and_invalid_password_TC_22} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.accept_cookies()
@@ -338,15 +331,15 @@ def test_login_with_valid_email_and_invalid_password_TC_21(driver):
     user_login_page.click_on_login_button()
     assert (user_login_page.get_invalid_credentials_error_message() ==
             user_login_page.INVALID_CREDENTIALS)
-    log.info(f"{test_login_with_valid_email_and_invalid_password_TC_21} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_with_valid_email_and_invalid_password_TC_22} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_with_invalid_email_and_invalid_password_TC_22(driver):
+def test_login_with_invalid_email_and_invalid_password_TC_23(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_with_invalid_email_and_invalid_password_TC_22} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_with_invalid_email_and_invalid_password_TC_23} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.accept_cookies()
@@ -354,47 +347,47 @@ def test_login_with_invalid_email_and_invalid_password_TC_22(driver):
     user_login_page.click_on_login_button()
     assert (user_login_page.get_invalid_credentials_error_message() ==
             user_login_page.INVALID_CREDENTIALS)
-    log.info(f"{test_login_with_invalid_email_and_invalid_password_TC_22} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_with_invalid_email_and_invalid_password_TC_23} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_valid_login_TC_23(driver):
+def test_valid_login_TC_24(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_valid_login_TC_23} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_valid_login_TC_24} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.accept_cookies()
     user_login_page.user_login(user_login_page.VALID_USERNAME, user_login_page.VALID_PASSWORD)
     assert user_login_page.validate_welcome_message()
-    log.info(f"{test_valid_login_TC_23} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_valid_login_TC_24} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_24(driver):
+def test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_25(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_24} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_25} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME)
     user_login_page.accept_cookies()
     user_login_page.user_login(user_login_page.VALID_USERNAME, user_login_page.VALID_PASSWORD)
     user_login_page.navigate_back_and_forward()
     assert user_login_page.URL_ADMIN_SUBDIRECTORY in driver.current_url
-    log.info(f"{test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_24} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_user_cannot_be_logged_out_after_clicking_system_back_button_TC_25} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_system_back_button_TC_25(driver):
+def test_login_system_back_button_TC_26(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> started")
-    user_login_page.navigate_to_domain_page()
-    user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
-    user_login_page.accept_cookies()
+    log.info(f"{test_login_system_back_button_TC_26} >>>>>>>>>>>>>>>>> started")
+    user_login_page.change_password(user_login_page.VALID_USERNAME2, user_login_page.DOMAIN_NAME_2,
+                                    user_login_page.VALID_PASSWORD2, user_login_page.VALID_PASSWORD2)
+    user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
     time.sleep(5)
     otp = get_data_from_email.get_latest_otp(user_login_page.user, user_login_page.password, user_login_page.imap_url)
@@ -405,31 +398,30 @@ def test_login_system_back_button_TC_25(driver):
     user_login_page.click_on_logout_button()
     driver.back()
     assert user_login_page.URL_COMPANY_SUBDIRECTORY in driver.current_url
-    log.info(f"{test_login_system_back_button_TC_25} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_system_back_button_TC_26} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_login_otp_is_enable_TC_26(driver):
+def test_login_otp_is_enable_TC_27(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_login_otp_is_enable_TC_26} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_login_otp_is_enable_TC_27} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
-    user_login_page.accept_cookies()
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
     time.sleep(5)
     assert user_login_page.URL_VERIFY_OTP_SUBDIRECTORY in driver.current_url
     assert user_login_page.validate_verify_otp_text()
-    log.info(f"{test_login_otp_is_enable_TC_26} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_login_otp_is_enable_TC_27} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27(driver):
+def test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_28(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_28} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
     user_login_page.accept_cookies()
@@ -438,20 +430,19 @@ def test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27(driver):
     user_login_page.click_on_verify_button()
     assert (user_login_page.get_otp_required_validation_message() ==
             user_login_page.OTP_REQUIRED_VALIDATION_MESSAGE)
-    log.info(f"{test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_27} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_that_user_cannot_proceed_without_inputting_the_OTP_code_TC_28} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_that_user_cannot_proceed_with_invalid_OTP_code_TC_28(driver):
+def test_that_user_cannot_proceed_with_invalid_OTP_code_TC_29(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_that_user_cannot_proceed_with_invalid_OTP_code_TC_28} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_that_user_cannot_proceed_with_invalid_OTP_code_TC_29} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
     user_login_page.accept_cookies()
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
-    # time.sleep(10)
     user_login_page.fill_otp_field(user_login_page.INVALID_OTP)
     user_login_page.click_on_verify_button()
     assert (user_login_page.get_invalid_otp_error_message() ==
@@ -461,19 +452,18 @@ def test_that_user_cannot_proceed_with_invalid_OTP_code_TC_28(driver):
                                     user_login_page.VALID_PASSWORD2,
                                     user_login_page.VALID_PASSWORD2,
                                     )
-    log.info(f"{test_that_user_cannot_proceed_with_invalid_OTP_code_TC_28} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_that_user_cannot_proceed_with_invalid_OTP_code_TC_29} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_user_cannot_attempt_wrong_OTP_more_than_7_times_TC_29(driver):
+def test_user_cannot_attempt_wrong_OTP_more_than_7_times_TC_30(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_user_cannot_attempt_wrong_OTP_more_than_7_times_TC_29} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_user_cannot_attempt_wrong_OTP_more_than_7_times_TC_30} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
-    user_login_page.accept_cookies()
     time.sleep(3)
     user_login_page.fill_invalid_otp_code_multiple_times()
     assert (user_login_page.get_locked_account_validation_message() ==
@@ -481,20 +471,19 @@ def test_user_cannot_attempt_wrong_OTP_more_than_7_times_TC_29(driver):
     user_login_page.change_password(user_login_page.VALID_USERNAME2, user_login_page.DOMAIN_NAME_2,
                                     user_login_page.VALID_PASSWORD2, user_login_page.VALID_PASSWORD2)
     time.sleep(2)
-    log.info(f"{test_user_cannot_attempt_wrong_OTP_more_than_7_times_TC_29} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_user_cannot_attempt_wrong_OTP_more_than_7_times_TC_30} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_user_cannot_attempt_wrong_OTP_more_than_7_times_and_reset_password_TC_30(driver):
+def test_user_cannot_attempt_wrong_OTP_more_than_7_times_and_reset_password_TC_31(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
     log.info(
-        f"{test_user_cannot_attempt_wrong_OTP_more_than_7_times_and_reset_password_TC_30} >>>>>>>>>>>>>>>>> started")
+        f"{test_user_cannot_attempt_wrong_OTP_more_than_7_times_and_reset_password_TC_31} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
-    user_login_page.accept_cookies()
     time.sleep(3)
     user_login_page.fill_invalid_otp_code_multiple_times()
     assert (user_login_page.get_locked_account_validation_message() ==
@@ -506,20 +495,19 @@ def test_user_cannot_attempt_wrong_OTP_more_than_7_times_and_reset_password_TC_3
     assert (user_login_page.get_operation_successful_validation_message() ==
             user_login_page.OPERATION_SUCCESSFUL_VALIDATION_MESSAGE)
     log.info(
-        f"{test_user_cannot_attempt_wrong_OTP_more_than_7_times_and_reset_password_TC_30} >>>>>>>>>>>>>>>>> finished")
+        f"{test_user_cannot_attempt_wrong_OTP_more_than_7_times_and_reset_password_TC_31} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_that_user_cannot_login_without_resecting_their_password_as_instructed_TC_31(driver):
+def test_that_user_cannot_login_without_resecting_their_password_as_instructed_TC_32(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
     log.info(
-        f"{test_that_user_cannot_login_without_resecting_their_password_as_instructed_TC_31} >>>>>>>>>>>>>>>>> started")
+        f"{test_that_user_cannot_login_without_resecting_their_password_as_instructed_TC_32} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
-    user_login_page.accept_cookies()
     time.sleep(3)
     user_login_page.fill_invalid_otp_code_multiple_times()
     assert (user_login_page.get_locked_account_validation_message() ==
@@ -533,18 +521,18 @@ def test_that_user_cannot_login_without_resecting_their_password_as_instructed_T
             user_login_page.LOCKED_ACCOUNT_VALIDATION_MESSAGE)
     user_login_page.change_password(user_login_page.VALID_USERNAME2, user_login_page.DOMAIN_NAME_2,
                                     user_login_page.VALID_PASSWORD2, user_login_page.VALID_PASSWORD2)
-    time.sleep(2)
+    time.sleep(3)
     log.info(
-        f"{test_that_user_cannot_login_without_resecting_their_password_as_instructed_TC_31} >>>>>>>>>>>>>>>>> finished")
+        f"{test_that_user_cannot_login_without_resecting_their_password_as_instructed_TC_32} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_user_successfully_resect_password_via_received_reset_password_link_sent_to_email_TC_32(driver):
+def test_user_successfully_resect_password_via_received_reset_password_link_sent_to_email_TC_33(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
     log.info(
-        f"{test_user_successfully_resect_password_via_received_reset_password_link_sent_to_email_TC_32} >>>>>>>>>>>>>>>>> started")
+        f"{test_user_successfully_resect_password_via_received_reset_password_link_sent_to_email_TC_33} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_2)
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
@@ -560,39 +548,39 @@ def test_user_successfully_resect_password_via_received_reset_password_link_sent
     assert (user_login_page.get_operation_successful_validation_message() ==
             user_login_page.OPERATION_SUCCESSFUL_VALIDATION_MESSAGE)
     log.info(
-        f"{test_user_successfully_resect_password_via_received_reset_password_link_sent_to_email_TC_32} >>>>>>>>>>>>>>>>> finished")
+        f"{test_user_successfully_resect_password_via_received_reset_password_link_sent_to_email_TC_33} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_that_user_login_with_valid_OTP_code_TC_33(driver):
+def test_that_user_login_with_valid_OTP_code_TC_34(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_that_user_login_with_valid_OTP_code_TC_33} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_that_user_login_with_valid_OTP_code_TC_34} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
     user_login_page.accept_cookies()
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
-    time.sleep(5)
+    time.sleep(10)
     otp = get_data_from_email.get_latest_otp(user_login_page.user, user_login_page.password, user_login_page.imap_url)
     user_login_page.fill_otp_field(otp)
     user_login_page.click_on_verify_button()
     time.sleep(5)
     assert user_login_page.URL_ADMIN_SUBDIRECTORY in driver.current_url
-    log.info(f"{test_that_user_login_with_valid_OTP_code_TC_33} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_that_user_login_with_valid_OTP_code_TC_34} >>>>>>>>>>>>>>>>> finished")
 
 
 @mark.regression
 @mark.smoke
-def test_that_user_can_successfully_logout_TC_34(driver):
+def test_that_user_can_successfully_logout_TC_35(driver):
     log = cl.custom_logger(logging.DEBUG)
     user_login_page = LoginPage(driver)
-    log.info(f"{test_that_user_can_successfully_logout_TC_34} >>>>>>>>>>>>>>>>> started")
+    log.info(f"{test_that_user_can_successfully_logout_TC_35} >>>>>>>>>>>>>>>>> started")
     user_login_page.navigate_to_domain_page()
     user_login_page.submit_domain_name(user_login_page.DOMAIN_NAME_TESTAUTO)
     user_login_page.accept_cookies()
     user_login_page.user_login(user_login_page.VALID_USERNAME2, user_login_page.VALID_PASSWORD2)
-    time.sleep(5)
+    time.sleep(10)
     otp = get_data_from_email.get_latest_otp(user_login_page.user, user_login_page.password, user_login_page.imap_url)
     user_login_page.fill_otp_field(otp)
     user_login_page.click_on_verify_button()
@@ -601,6 +589,6 @@ def test_that_user_can_successfully_logout_TC_34(driver):
     user_login_page.click_on_later_button()
     user_login_page.click_on_logout_button()
     assert user_login_page.URL_LOGIN_SUBDIRECTORY in driver.current_url
-    log.info(f"{test_that_user_can_successfully_logout_TC_34} >>>>>>>>>>>>>>>>> finished")
+    log.info(f"{test_that_user_can_successfully_logout_TC_35} >>>>>>>>>>>>>>>>> finished")
 
 

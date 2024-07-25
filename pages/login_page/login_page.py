@@ -102,7 +102,6 @@ class LoginPage(BasePage):
     password = 'enggxzorbndjspax'
     imap_url = 'imap.gmail.com'
 
-
     # Error and validation messages
     DOMAIN_NAME_ERROR_MESSAGE = 'This Domain Does Not Exist In Our System'
     USERNAME_REQUIRED_ERROR_MESSAGE = 'A username or email address is required.'
@@ -126,7 +125,7 @@ class LoginPage(BasePage):
                                                                                  self.login_navi_button_xpath_locator))))
 
     def navigate_to_domain_page(self):
-        self.element_click(self.login_navi_button_xpath_locator)
+        return self.element_click(self.login_navi_button_xpath_locator)
 
     def verify_domain_page(self):
         return self.get_text(self.domain_page_text_xpath_locator)
@@ -220,7 +219,6 @@ class LoginPage(BasePage):
 
     def change_password(self, email, domain_name, new_password, confirm_password):
         self.navigate_to_new_url('http://172.105.53.207/company')
-        self.navigate_to_domain_page()
         self.submit_domain_name(domain_name)
         self.navigate_to_forget_password_page()
         self.fill_forgot_password_email_field(email)
@@ -230,21 +228,6 @@ class LoginPage(BasePage):
         self.navigate_to_new_url(link)
         time.sleep(3)
         self.submit_reset_password(new_password, confirm_password)
-
-    # def change_password_and_login_via_new_password(self, email, domain_name, new_password, confirm_password):
-    #     self.navigate_to_domain_page()
-    #     self.submit_domain_name(domain_name)
-    #     self.accept_cookies()
-    #     self.navigate_to_forget_password_page()
-    #     self.fill_forgot_password_email_field(email)
-    #     self.click_on_reset_password_button()
-    #     time.sleep(10)
-    #     link = get_data_from_email.get_latest_email()
-    #     self.navigate_to_new_url(link)
-    #     time.sleep(3)
-    #     self.submit_reset_password(new_password, confirm_password)
-    #     self.submit_domain_name(domain_name)
-    #     self.user_login(email, new_password)
 
     def validate_forget_password_button(self):
         return self.is_element_present(self.forgot_password_xpath_locator)
@@ -299,7 +282,6 @@ class LoginPage(BasePage):
             self.fill_otp_field(self.INVALID_OTP)
             time.sleep(1)
             self.click_on_verify_button()
-
 
     def fill_confirm_password_field(self, password):
         return self.send_keys(password, self.confirm_password_field_xpath_locator)
